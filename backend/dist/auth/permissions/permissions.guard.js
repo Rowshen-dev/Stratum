@@ -25,8 +25,7 @@ let PermissionsGuard = class PermissionsGuard {
         const request = context.switchToHttp().getRequest();
         const user = request.user;
         const userPermissions = user.roles.flatMap((role) => role.permissions.map(p => p.name));
-        return requiredPermissions.every(p => userPermissions.includes(p)),
-        ;
+        return requiredPermissions.every(p => userPermissions.includes(p));
     }
 };
 exports.PermissionsGuard = PermissionsGuard;

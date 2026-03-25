@@ -1,91 +1,66 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
+import { Role } from './roles/role.enum';
+import { User } from './user/user.entity';
+import { Wallet } from '../wallet/wallet.entity';
 
 @Injectable()
 export class AuthService {
 
-    constructor (private jwtService: JwtService) {}
+  constructor(
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+    private jwtService: JwtService,
 
-    async refresh(refreshToken: string) {
-        try {
-            console.log('REFRESH TOKEN:', refreshToken);
+    @InjectRepository(Wallet)
+private walletRepository: Repository<Wallet>,
+  ) {}
 
-            const token = refreshToken.startsWith('Bearer ')
-            ? refreshToken.replace('Bearer', '')
-            :refreshToken;
+ async register(email: string, password: string) {
+  const hashedPassword = await bcrypt.hash(password, 10); 
 
-            const payload = this.jwtService.verify(token, {
-                    secret: 'refresh-secret',
-                });
-            const access_token = this.jwtService.sign(
-                {
-                    userId: payload.userId,
-                    email: payload.email,
-                },
-                {
-                    secret: 'access-secret',
-                    expiresIn: '15m',
-                },
-            );
-            return { access_token };
-        } catch(e) {
-            throw new UnauthorizedException('Invalid refresh token');
-        }
+  const user = this.userRepository.create({
+    email,
+    password: hashedPassword,
+    role: Role.ADMIN,
+  });
+
+  const savedUser = await this.userRepository.save(user);
+
+  const wallet = this.walletRepository.create({
+    user: savedUser,
+    balance: 1000,
+  });
+
+  await this.walletRepository.save(wallet);
+
+  return savedUser;
+}
+
+  async login(email: string, password: string) {
+
+    const user = await this.userRepository.findOne({
+      where: { email }
+    });
+
+    if (!user) {
+      throw new Error('User not found');
     }
 
-    private user = {
-        id:1,
-        email: 'test@mail.com',
-        passwordHash: bcrypt.hashSync('123456', 10),
-    };
-   
+    const passwordValid = await bcrypt.compare(password, user.password);
 
-    async register(email: string, password: string) {
-    if( !email || !password ) {
-        throw new Error('Email and password required');
+    if (!passwordValid) {
+      throw new Error('Invalid password');
     }
+
+    const payload = { userId: user.id, email: user.email, role: user.role, };
+
     return {
-        message: 'User registered succesfully',
-        email,
+      access_token: this.jwtService.sign(payload),
     };
-}
+  }
 
-    async login(email: string, password: string) {
-        if(email !== this.user.email) {
-            throw new UnauthorizedException('Invalid credentials');
-        }
-        const isPasswordValid = bcrypt.compareSync(
-            password,
-            this.user.passwordHash,
-        );
-        if(!isPasswordValid) {
-            throw new UnauthorizedException('Invalid credentials');
-        }
-        const payload = {
-            userId: this.user.id,
-            email: this.user.email,
-            role: 'user',
-        };
-        const access_token = this.jwtService.sign(payload, {
-            secret: 'access-secret',
-            expiresIn: '15m',
-        });
-        const refresh_token = this.jwtService.sign(
-             {
-                userId: this.user.id,
-                email: this.user.email,
-             },
-
-             {
-            secret: 'refresh-secret',
-            expiresIn: '7d',
-             },
-        );
-        return {
-            access_token,
-            refresh_token,
-        };
-    }
 }
-      

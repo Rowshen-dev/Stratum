@@ -1,5 +1,4 @@
-import { Controller, Post, Body, Get, UseGuards, Request, Headers } from '@nestjs/common';
-import { JwtAuthGuard } from './jwt/jwt.guard';
+import { Controller, Post, Body, Request, Headers } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { RolesGuard } from './roles/roles.guard';
@@ -8,32 +7,29 @@ import { CurrentUser } from './common/current-user.decorator';
 import { Role } from './roles/role.enum';
 import { PermissionsGuard } from './permissions/permissions.guard';
 import { Permissions } from './permissions/permission.decorator';
+import { UseGuards, Get, Req } from '@nestjs/common';
+import { JwtAuthGuard } from './jwt-auth.guard';
+
 
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
+    
     @Post('login')
     login(@Body() body: {email: string; password: string }){
         return this.authService.login(body.email, body.password);
     }
+
+        /*
     @Post('refresh')
     refresh(@Headers('authorization') authHeader: string) {
         return this.authService.refresh(authHeader);
-    }
+    }*/
     @Post('register')
     register (@Body() dto: RegisterDto) {
         return this.authService.register(dto.email, dto.password);
 
-    }
-    
-    @UseGuards(JwtAuthGuard)
-    @Get('profile')
-    profile(@CurrentUser() user){
-        return {
-            message: 'Ты прощел JWT защиту',
-            user: user,
-        };
     }
    
  @UseGuards(JwtAuthGuard, RolesGuard)
@@ -47,14 +43,12 @@ export class AuthController {
     }
     
     
-    @UseGuards(JwtAuthGuard)
-    @Get('profile')
-    getProfile(@CurrentUser() user) {
-        return {
-            message: 'Ты прощёл JWT защиту !!!',
-            user: user,
-        };
-    }
+@UseGuards(JwtAuthGuard)
+@Get('profile')
+getProfile(@Req() req) {
+  return req.user;
+}
+
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.ADMIN)
     @Get('admin')

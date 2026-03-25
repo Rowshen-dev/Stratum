@@ -1,17 +1,14 @@
+import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
+import { User } from './user/user.entity';
+import { Wallet } from '../wallet/wallet.entity';
 export declare class AuthService {
+    private userRepository;
     private jwtService;
-    constructor(jwtService: JwtService);
-    refresh(refreshToken: string): Promise<{
-        access_token: string;
-    }>;
-    private user;
-    register(email: string, password: string): Promise<{
-        message: string;
-        email: string;
-    }>;
+    private walletRepository;
+    constructor(userRepository: Repository<User>, jwtService: JwtService, walletRepository: Repository<Wallet>);
+    register(email: string, password: string): Promise<User>;
     login(email: string, password: string): Promise<{
         access_token: string;
-        refresh_token: string;
     }>;
 }

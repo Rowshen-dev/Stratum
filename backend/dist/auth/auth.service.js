@@ -41,85 +41,67 @@ var __importStar = (this && this.__importStar) || (function () {
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
-const jwt_1 = require("@nestjs/jwt");
+const typeorm_1 = require("@nestjs/typeorm");
+const typeorm_2 = require("typeorm");
 const bcrypt = __importStar(require("bcrypt"));
+const jwt_1 = require("@nestjs/jwt");
+const role_enum_1 = require("./roles/role.enum");
+const user_entity_1 = require("./user/user.entity");
+const wallet_entity_1 = require("../wallet/wallet.entity");
 let AuthService = class AuthService {
+    userRepository;
     jwtService;
-    constructor(jwtService) {
+    walletRepository;
+    constructor(userRepository, jwtService, walletRepository) {
+        this.userRepository = userRepository;
         this.jwtService = jwtService;
+        this.walletRepository = walletRepository;
     }
-    async refresh(refreshToken) {
-        try {
-            console.log('REFRESH TOKEN:', refreshToken);
-            const token = refreshToken.startsWith('Bearer ')
-                ? refreshToken.replace('Bearer', '')
-                : refreshToken;
-            const payload = this.jwtService.verify(token, {
-                secret: 'refresh-secret',
-            });
-            const access_token = this.jwtService.sign({
-                userId: payload.userId,
-                email: payload.email,
-            }, {
-                secret: 'access-secret',
-                expiresIn: '15m',
-            });
-            return { access_token };
-        }
-        catch (e) {
-            throw new common_1.UnauthorizedException('Invalid refresh token');
-        }
-    }
-    user = {
-        id: 1,
-        email: 'test@mail.com',
-        passwordHash: bcrypt.hashSync('123456', 10),
-    };
     async register(email, password) {
-        if (!email || !password) {
-            throw new Error('Email and password required');
-        }
-        return {
-            message: 'User registered succesfully',
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = this.userRepository.create({
             email,
-        };
+            password: hashedPassword,
+            role: role_enum_1.Role.ADMIN,
+        });
+        const savedUser = await this.userRepository.save(user);
+        const wallet = this.walletRepository.create({
+            user: savedUser,
+            balance: 1000,
+        });
+        await this.walletRepository.save(wallet);
+        return savedUser;
     }
     async login(email, password) {
-        if (email !== this.user.email) {
-            throw new common_1.UnauthorizedException('Invalid credentials');
-        }
-        const isPasswordValid = bcrypt.compareSync(password, this.user.passwordHash);
-        if (!isPasswordValid) {
-            throw new common_1.UnauthorizedException('Invalid credentials');
-        }
-        const payload = {
-            userId: this.user.id,
-            email: this.user.email,
-            role: 'user',
-        };
-        const access_token = this.jwtService.sign(payload, {
-            secret: 'access-secret',
-            expiresIn: '15m',
+        const user = await this.userRepository.findOne({
+            where: { email }
         });
-        const refresh_token = this.jwtService.sign({
-            userId: this.user.id,
-            email: this.user.email,
-        }, {
-            secret: 'refresh-secret',
-            expiresIn: '7d',
-        });
+        if (!user) {
+            throw new Error('User not found');
+        }
+        const passwordValid = await bcrypt.compare(password, user.password);
+        if (!passwordValid) {
+            throw new Error('Invalid password');
+        }
+        const payload = { userId: user.id, email: user.email, role: user.role, };
         return {
-            access_token,
-            refresh_token,
+            access_token: this.jwtService.sign(payload),
         };
     }
 };
 exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [jwt_1.JwtService])
+    __param(0, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
+    __param(2, (0, typeorm_1.InjectRepository)(wallet_entity_1.Wallet)),
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        jwt_1.JwtService,
+        typeorm_2.Repository])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map

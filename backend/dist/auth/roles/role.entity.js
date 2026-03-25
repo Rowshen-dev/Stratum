@@ -11,12 +11,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Role = void 0;
 const typeorm_1 = require("typeorm");
-const permission_entity_1 = require("../permissions/permission.entity");
 const user_entity_1 = require("../user/user.entity");
 let Role = class Role {
     id;
     name;
-    permissions;
     users;
 };
 exports.Role = Role;
@@ -29,12 +27,7 @@ __decorate([
     __metadata("design:type", String)
 ], Role.prototype, "name", void 0);
 __decorate([
-    (0, typeorm_1.ManyToMany)(() => permission_entity_1.Permission, permission => permission.roles, { eager: true }),
-    (0, typeorm_1.Jointable)(),
-    __metadata("design:type", Array)
-], Role.prototype, "permissions", void 0);
-__decorate([
-    (0, typeorm_1.ManyToMany)(() => user_entity_1.User, user => user.roles),
+    (0, typeorm_1.ManyToMany)(() => user_entity_1.User, user => user.role),
     __metadata("design:type", Array)
 ], Role.prototype, "users", void 0);
 exports.Role = Role = __decorate([

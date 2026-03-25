@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Permission = void 0;
 const typeorm_1 = require("typeorm");
-const role_entity_1 = require("../roles/role.entity");
 let Permission = class Permission {
     id;
     name;
@@ -26,10 +25,6 @@ __decorate([
     (0, typeorm_1.Column)({ unique: true }),
     __metadata("design:type", String)
 ], Permission.prototype, "name", void 0);
-__decorate([
-    (0, typeorm_1.ManyToMany)(() => role_entity_1.Role, role => role.permissions),
-    __metadata("design:type", Array)
-], Permission.prototype, "roles", void 0);
 exports.Permission = Permission = __decorate([
     (0, typeorm_1.Entity)('permissions')
 ], Permission);
