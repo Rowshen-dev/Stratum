@@ -18,4 +18,8 @@ export declare class WalletController {
     withdraw(req: any, body: any): Promise<{
         message: string;
     }>;
+    changeBalance(body: {
+        userId: number;
+        amount: number;
+    }): Promise<import("./wallet.entity").Wallet>;
 }

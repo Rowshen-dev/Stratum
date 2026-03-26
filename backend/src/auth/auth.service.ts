@@ -20,24 +20,23 @@ private walletRepository: Repository<Wallet>,
   ) {}
 
  async register(email: string, password: string) {
-  const hashedPassword = await bcrypt.hash(password, 10); 
+  const hashedPassword = await bcrypt.hash(password, 10);
 
-  const user = this.userRepository.create({
+  // 👉 создаём пользователя
+  const user = await this.userRepository.save({
     email,
     password: hashedPassword,
-    role: Role.ADMIN,
   });
 
-  const savedUser = await this.userRepository.save(user);
-
+  // 👉 создаём wallet ПРАВИЛЬНО
   const wallet = this.walletRepository.create({
-    user: savedUser,
-    balance: 1000,
+    user: user,   // ⚠️ ВАЖНО: через create!
+    balance: 0,
   });
 
   await this.walletRepository.save(wallet);
 
-  return savedUser;
+  return user;
 }
 
   async login(email: string, password: string) {

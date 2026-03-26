@@ -9,6 +9,7 @@ import { Role } from './auth/roles/role.entity';
 import { WalletModule } from './wallet/wallet.module';
 import { TransactionsModule } from './transactions/transactions.module';
 import { Transaction } from './transactions/transaction.entity';
+import { UsersModule } from './auth/user/users.module';
 
 
 @Module({
@@ -28,6 +29,7 @@ import { Transaction } from './transactions/transaction.entity';
     AuthModule,
     WalletModule,
     TransactionsModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -47,6 +47,12 @@ let WalletService = class WalletService {
             where: { user: { id: fromUserId } },
             relations: ['user'],
         });
+        if (!fromWallet) {
+            throw new Error('WALLET NOT FOUND');
+        }
+        if (fromWallet.user.isBlocked) {
+            throw new Error('USER BLOCKED');
+        }
         const toWallet = await this.walletRepository.findOne({
             where: { user: { id: toUserId } },
             relations: ['user'],
@@ -111,6 +117,9 @@ let WalletService = class WalletService {
         if (!wallet) {
             throw new Error('WALLET NOT FOUND');
         }
+        if (wallet.user.isBlocked) {
+            throw new Error('USER BLOCKED');
+        }
         if (wallet.balance < amount) {
             throw new Error('NOT ENOUGH MONEY');
         }
@@ -128,6 +137,17 @@ let WalletService = class WalletService {
             createdAt: new Date(),
         });
         return { message: 'WITHDRAW SUCCESS' };
+    }
+    async adminChangeBalance(userId, amount) {
+        const wallet = await this.walletRepository.findOne({
+            where: { user: { id: userId } },
+            relations: ['user'],
+        });
+        if (!wallet) {
+            throw new Error('WALLET NOT FOUND');
+        }
+        wallet.balance += amount;
+        return this.walletRepository.save(wallet);
     }
 };
 exports.WalletService = WalletService;

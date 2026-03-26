@@ -18,4 +18,5 @@ export declare class WalletService {
     withdraw(userId: number, amount: number): Promise<{
         message: string;
     }>;
+    adminChangeBalance(userId: number, amount: number): Promise<Wallet>;
 }

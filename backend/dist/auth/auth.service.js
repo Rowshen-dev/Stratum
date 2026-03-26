@@ -51,7 +51,6 @@ const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const bcrypt = __importStar(require("bcrypt"));
 const jwt_1 = require("@nestjs/jwt");
-const role_enum_1 = require("./roles/role.enum");
 const user_entity_1 = require("./user/user.entity");
 const wallet_entity_1 = require("../wallet/wallet.entity");
 let AuthService = class AuthService {
@@ -65,18 +64,16 @@ let AuthService = class AuthService {
     }
     async register(email, password) {
         const hashedPassword = await bcrypt.hash(password, 10);
-        const user = this.userRepository.create({
+        const user = await this.userRepository.save({
             email,
             password: hashedPassword,
-            role: role_enum_1.Role.ADMIN,
         });
-        const savedUser = await this.userRepository.save(user);
         const wallet = this.walletRepository.create({
-            user: savedUser,
-            balance: 1000,
+            user: user,
+            balance: 0,
         });
         await this.walletRepository.save(wallet);
-        return savedUser;
+        return user;
     }
     async login(email, password) {
         const user = await this.userRepository.findOne({

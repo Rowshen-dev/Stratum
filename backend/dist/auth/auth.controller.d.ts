@@ -9,7 +9,10 @@ export declare class AuthController {
     }): Promise<{
         access_token: string;
     }>;
-    register(dto: RegisterDto): Promise<import("./user/user.entity").User>;
+    register(dto: RegisterDto): Promise<{
+        email: string;
+        password: string;
+    } & import("./user/user.entity").User>;
     user(user: any): {
         message: string;
         user: any;

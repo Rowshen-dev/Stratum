@@ -17,6 +17,9 @@ const common_1 = require("@nestjs/common");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 const wallet_service_1 = require("./wallet.service");
 const common_2 = require("@nestjs/common");
+const roles_guard_1 = require("../auth/roles/roles.guard");
+const roles_decorator_1 = require("../auth/roles/roles.decorator");
+const role_enum_1 = require("../auth/roles/role.enum");
 let WalletController = class WalletController {
     walletService;
     constructor(walletService) {
@@ -33,6 +36,9 @@ let WalletController = class WalletController {
     }
     withdraw(req, body) {
         return this.walletService.withdraw(req.user.id, body.amount);
+    }
+    changeBalance(body) {
+        return this.walletService.adminChangeBalance(body.userId, body.amount);
     }
 };
 exports.WalletController = WalletController;
@@ -71,6 +77,15 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], WalletController.prototype, "withdraw", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(role_enum_1.Role.ADMIN),
+    (0, common_2.Post)('admin/change-balance'),
+    __param(0, (0, common_2.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], WalletController.prototype, "changeBalance", null);
 exports.WalletController = WalletController = __decorate([
     (0, common_1.Controller)('wallet'),
     __metadata("design:paramtypes", [wallet_service_1.WalletService])

@@ -18,6 +18,7 @@ const role_entity_1 = require("./auth/roles/role.entity");
 const wallet_module_1 = require("./wallet/wallet.module");
 const transactions_module_1 = require("./transactions/transactions.module");
 const transaction_entity_1 = require("./transactions/transaction.entity");
+const users_module_1 = require("./auth/user/users.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -37,6 +38,7 @@ exports.AppModule = AppModule = __decorate([
             auth_module_1.AuthModule,
             wallet_module_1.WalletModule,
             transactions_module_1.TransactionsModule,
+            users_module_1.UsersModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

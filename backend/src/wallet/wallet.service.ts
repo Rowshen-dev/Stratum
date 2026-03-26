@@ -42,6 +42,14 @@ private transactionRepository: Repository<Transaction>,
     relations: ['user'],
   });
 
+  if (!fromWallet) {
+  throw new Error('WALLET NOT FOUND');
+}
+
+if (fromWallet.user.isBlocked) {
+  throw new Error('USER BLOCKED');
+}
+   
   const toWallet = await this.walletRepository.findOne({
     where: { user: { id: toUserId } },
     relations: ['user'],
@@ -125,6 +133,10 @@ async withdraw(userId: number, amount: number) {
     throw new Error('WALLET NOT FOUND');
   }
 
+  if (wallet.user.isBlocked) {
+    throw new Error('USER BLOCKED');
+  }
+
   if (wallet.balance < amount) {
     throw new Error('NOT ENOUGH MONEY');
   }
@@ -148,6 +160,21 @@ wallet.balance -= total;
   });
 
   return { message: 'WITHDRAW SUCCESS' };
+}
+
+async adminChangeBalance(userId: number, amount: number) {
+  const wallet = await this.walletRepository.findOne({
+    where: { user: { id: userId } },
+    relations: ['user'],
+  });
+
+  if (!wallet) {
+    throw new Error('WALLET NOT FOUND');
+  }
+
+  wallet.balance += amount;
+
+  return this.walletRepository.save(wallet);
 }
 
 }
