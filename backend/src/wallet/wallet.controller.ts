@@ -5,6 +5,7 @@ import { Body, Post } from '@nestjs/common';
 import { RolesGuard } from '../auth/roles/roles.guard';
 import { Roles } from '../auth/roles/roles.decorator';
 import { Role } from '../auth/roles/role.enum';
+import { Param } from '@nestjs/common';
 
 @Controller('wallet')
 export class WalletController {
@@ -43,6 +44,16 @@ withdraw(@Req() req, @Body() body) {
 @Post('admin/change-balance')
 changeBalance(@Body() body: { userId: number; amount: number }) {
   return this.walletService.adminChangeBalance(body.userId, body.amount);
+}
+
+@Post('freeze/:userId')
+freeze(@Param('userId') userId: string) {
+  return this.walletService.freezeWallet(Number(userId));
+}
+
+@Post('unfreeze/:userId')
+unfreeze(@Param('userId') userId: string) {
+  return this.walletService.unfreezeWallet(Number(userId));
 }
 
 }

@@ -6,4 +6,5 @@ export declare class UsersService {
     blockUser(id: number): Promise<User>;
     unblockUser(id: number): Promise<User>;
     getAllUsers(): Promise<User[]>;
+    findById(id: number): Promise<User | null>;
 }

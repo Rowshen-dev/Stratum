@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Transaction = void 0;
 const typeorm_1 = require("typeorm");
 const user_entity_1 = require("../auth/user/user.entity");
+const typeorm_2 = require("typeorm");
 let Transaction = class Transaction {
     id;
     fromUser;
@@ -37,7 +38,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Transaction.prototype, "amount", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_2.CreateDateColumn)(),
     __metadata("design:type", Date)
 ], Transaction.prototype, "createdAt", void 0);
 exports.Transaction = Transaction = __decorate([

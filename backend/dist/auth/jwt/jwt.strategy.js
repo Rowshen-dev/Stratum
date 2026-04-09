@@ -29,10 +29,7 @@ let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(pas
         this.userRepository = userRepository;
     }
     async validate(payload) {
-        const user = await this.userRepository.findOne({
-            where: { id: payload.userId },
-        });
-        return user;
+        return { id: payload.sub };
     }
 };
 exports.JwtStrategy = JwtStrategy;

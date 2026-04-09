@@ -20,6 +20,7 @@ const common_2 = require("@nestjs/common");
 const roles_guard_1 = require("../auth/roles/roles.guard");
 const roles_decorator_1 = require("../auth/roles/roles.decorator");
 const role_enum_1 = require("../auth/roles/role.enum");
+const common_3 = require("@nestjs/common");
 let WalletController = class WalletController {
     walletService;
     constructor(walletService) {
@@ -39,6 +40,12 @@ let WalletController = class WalletController {
     }
     changeBalance(body) {
         return this.walletService.adminChangeBalance(body.userId, body.amount);
+    }
+    freeze(userId) {
+        return this.walletService.freezeWallet(Number(userId));
+    }
+    unfreeze(userId) {
+        return this.walletService.unfreezeWallet(Number(userId));
     }
 };
 exports.WalletController = WalletController;
@@ -86,6 +93,20 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], WalletController.prototype, "changeBalance", null);
+__decorate([
+    (0, common_2.Post)('freeze/:userId'),
+    __param(0, (0, common_3.Param)('userId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], WalletController.prototype, "freeze", null);
+__decorate([
+    (0, common_2.Post)('unfreeze/:userId'),
+    __param(0, (0, common_3.Param)('userId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], WalletController.prototype, "unfreeze", null);
 exports.WalletController = WalletController = __decorate([
     (0, common_1.Controller)('wallet'),
     __metadata("design:paramtypes", [wallet_service_1.WalletService])

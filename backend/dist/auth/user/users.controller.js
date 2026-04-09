@@ -33,6 +33,9 @@ let UsersController = class UsersController {
     getAllUsers() {
         return this.usersService.getAllUsers();
     }
+    getMe(req) {
+        return req.user;
+    }
 };
 exports.UsersController = UsersController;
 __decorate([
@@ -61,6 +64,14 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "getAllUsers", null);
+__decorate([
+    (0, common_1.Get)('me'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "getMe", null);
 exports.UsersController = UsersController = __decorate([
     (0, common_1.Controller)('users'),
     __metadata("design:paramtypes", [users_service_1.UsersService])

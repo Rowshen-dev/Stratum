@@ -15,6 +15,7 @@ const user_entity_1 = require("../auth/user/user.entity");
 let Wallet = class Wallet {
     id;
     balance;
+    isFrozen;
     user;
 };
 exports.Wallet = Wallet;
@@ -26,6 +27,10 @@ __decorate([
     (0, typeorm_1.Column)({ default: 0 }),
     __metadata("design:type", Number)
 ], Wallet.prototype, "balance", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: false }),
+    __metadata("design:type", Boolean)
+], Wallet.prototype, "isFrozen", void 0);
 __decorate([
     (0, typeorm_1.OneToOne)(() => user_entity_1.User),
     (0, typeorm_1.JoinColumn)(),

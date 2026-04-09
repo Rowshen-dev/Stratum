@@ -10,7 +10,6 @@ export declare class WalletController {
         amount: number;
     }): Promise<{
         message: string;
-        fee: number;
     }>;
     deposit(req: any, body: any): Promise<{
         message: string;
@@ -22,4 +21,10 @@ export declare class WalletController {
         userId: number;
         amount: number;
     }): Promise<import("./wallet.entity").Wallet>;
+    freeze(userId: string): Promise<{
+        message: string;
+    }>;
+    unfreeze(userId: string): Promise<{
+        message: string;
+    }>;
 }

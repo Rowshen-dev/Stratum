@@ -13,12 +13,13 @@ const wallet_entity_1 = require("./wallet.entity");
 const wallet_service_1 = require("./wallet.service");
 const wallet_controller_1 = require("./wallet.controller");
 const transaction_entity_1 = require("../transactions/transaction.entity");
+const user_entity_1 = require("../auth/user/user.entity");
 let WalletModule = class WalletModule {
 };
 exports.WalletModule = WalletModule;
 exports.WalletModule = WalletModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([wallet_entity_1.Wallet, transaction_entity_1.Transaction])],
+        imports: [typeorm_1.TypeOrmModule.forFeature([wallet_entity_1.Wallet, user_entity_1.User, transaction_entity_1.Transaction])],
         providers: [wallet_service_1.WalletService],
         controllers: [wallet_controller_1.WalletController],
     })

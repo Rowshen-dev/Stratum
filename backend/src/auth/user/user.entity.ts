@@ -13,6 +13,9 @@ export class User {
   @Column()
   password: string;
 
+  @Column({ default: 1000 })
+balance: number;
+
 @Column ({
 type: 'enum',
 enum: Role,

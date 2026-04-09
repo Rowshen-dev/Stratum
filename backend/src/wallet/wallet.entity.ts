@@ -9,6 +9,9 @@ export class Wallet {
   @Column({ default: 0 })
   balance: number;
 
+  @Column({ default: false })
+isFrozen: boolean;
+
   @OneToOne(() => User)
   @JoinColumn()
   user: User;

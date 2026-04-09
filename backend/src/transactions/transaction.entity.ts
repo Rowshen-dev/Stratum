@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { User } from '../auth/user/user.entity';
+ import { CreateDateColumn } from 'typeorm';
 
 @Entity()
 export class Transaction {
@@ -15,6 +16,6 @@ export class Transaction {
   @Column()
   amount: number;
 
-  @Column()
-  createdAt: Date;
+@CreateDateColumn()
+createdAt: Date;
 }

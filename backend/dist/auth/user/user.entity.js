@@ -16,6 +16,7 @@ let User = class User {
     id;
     email;
     password;
+    balance;
     role;
     isBlocked;
 };
@@ -32,6 +33,10 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: 1000 }),
+    __metadata("design:type", Number)
+], User.prototype, "balance", void 0);
 __decorate([
     (0, typeorm_1.Column)({
         type: 'enum',

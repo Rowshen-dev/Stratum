@@ -1,16 +1,19 @@
 import { Wallet } from './wallet.entity';
 import { Repository } from 'typeorm';
 import { Transaction } from '../transactions/transaction.entity';
+import { User } from 'src/auth/user/user.entity';
+import { DataSource } from 'typeorm';
 export declare class WalletService {
+    private readonly dataSource;
     private transactionRepository;
     private walletRepository;
-    constructor(transactionRepository: Repository<Transaction>, walletRepository: Repository<Wallet>);
+    private userRepository;
+    constructor(dataSource: DataSource, transactionRepository: Repository<Transaction>, walletRepository: Repository<Wallet>, userRepository: Repository<User>);
     getBalance(userId: number): Promise<{
         balance: number;
     }>;
     sendMoney(fromUserId: number, toUserId: number, amount: number): Promise<{
         message: string;
-        fee: number;
     }>;
     deposit(userId: number, amount: number): Promise<{
         message: string;
@@ -19,4 +22,10 @@ export declare class WalletService {
         message: string;
     }>;
     adminChangeBalance(userId: number, amount: number): Promise<Wallet>;
+    freezeWallet(userId: number): Promise<{
+        message: string;
+    }>;
+    unfreezeWallet(userId: number): Promise<{
+        message: string;
+    }>;
 }

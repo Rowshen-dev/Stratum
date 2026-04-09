@@ -18,12 +18,18 @@ const typeorm_1 = require("@nestjs/typeorm");
 const wallet_entity_1 = require("./wallet.entity");
 const typeorm_2 = require("typeorm");
 const transaction_entity_1 = require("../transactions/transaction.entity");
+const user_entity_1 = require("../auth/user/user.entity");
+const typeorm_3 = require("typeorm");
 let WalletService = class WalletService {
+    dataSource;
     transactionRepository;
     walletRepository;
-    constructor(transactionRepository, walletRepository) {
+    userRepository;
+    constructor(dataSource, transactionRepository, walletRepository, userRepository) {
+        this.dataSource = dataSource;
         this.transactionRepository = transactionRepository;
         this.walletRepository = walletRepository;
+        this.userRepository = userRepository;
     }
     async getBalance(userId) {
         const wallet = await this.walletRepository.findOne({
@@ -34,56 +40,54 @@ let WalletService = class WalletService {
         };
     }
     async sendMoney(fromUserId, toUserId, amount) {
+        const fromUser = await this.userRepository.findOne({
+            where: { id: fromUserId },
+        });
+        const toUser = await this.userRepository.findOne({
+            where: { id: toUserId },
+        });
+        if (!fromUser || !toUser) {
+            throw new Error('USER NOT FOUND');
+        }
+        const fromWallet = await this.walletRepository.findOne({
+            where: { user: { id: fromUserId } },
+        });
+        const toWallet = await this.walletRepository.findOne({
+            where: { user: { id: toUserId } },
+        });
+        if (!fromWallet || !toWallet) {
+            throw new Error('WALLET NOT FOUND');
+        }
         if (amount <= 0) {
             throw new Error('INVALID AMOUNT');
         }
-        if (amount > 100000) {
-            throw new Error('LIMIT EXCEEDED');
-        }
-        console.log('FROM:', fromUserId);
-        console.log('TO:', toUserId);
-        console.log('AMOUNT:', amount);
-        const fromWallet = await this.walletRepository.findOne({
-            where: { user: { id: fromUserId } },
-            relations: ['user'],
-        });
-        if (!fromWallet) {
-            throw new Error('WALLET NOT FOUND');
-        }
-        if (fromWallet.user.isBlocked) {
-            throw new Error('USER BLOCKED');
-        }
-        const toWallet = await this.walletRepository.findOne({
-            where: { user: { id: toUserId } },
-            relations: ['user'],
-        });
-        console.log('FROM WALLET:', fromWallet);
-        console.log('TO WALLET:', toWallet);
-        if (!fromWallet) {
-            throw new Error('FROM WALLET NOT FOUND');
-        }
-        if (!toWallet) {
-            throw new Error('TO WALLET NOT FOUND');
-        }
         if (fromWallet.balance < amount) {
-            throw new Error('NOT ENOUGH MONEY');
+            throw new Error('INSUFFICIENT FUNDS');
         }
-        const fee = amount * 0.01;
-        const total = amount + fee;
-        if (fromWallet.balance < total) {
-            throw new Error('NOT ENOUGH MONEY (WITH FEE)');
-        }
-        fromWallet.balance -= total;
-        toWallet.balance += amount;
-        await this.walletRepository.save(fromWallet);
-        await this.walletRepository.save(toWallet);
-        await this.transactionRepository.save({
-            fromUser: fromWallet.user,
-            toUser: toWallet.user,
-            amount: amount,
-            createdAt: new Date(),
+        await this.dataSource.transaction(async (manager) => {
+            const fromWallet = await manager.findOne(wallet_entity_1.Wallet, {
+                where: { user: { id: fromUserId } },
+            });
+            const toWallet = await manager.findOne(wallet_entity_1.Wallet, {
+                where: { user: { id: toUserId } },
+            });
+            if (!fromWallet || !toWallet) {
+                throw new Error('WALLET NOT FOUND');
+            }
+            if (fromWallet.balance < amount) {
+                throw new Error('INSUFFICIENT FUNDS');
+            }
+            fromWallet.balance -= amount;
+            toWallet.balance += amount;
+            await manager.save(fromWallet);
+            await manager.save(toWallet);
+            await manager.save(transaction_entity_1.Transaction, {
+                fromUser: { id: fromUserId },
+                toUser: { id: toUserId },
+                amount: amount,
+            });
         });
-        return { message: 'OK', fee: fee, };
+        return { message: 'TRANSFER SUCCESS' };
     }
     async deposit(userId, amount) {
         const wallet = await this.walletRepository.findOne({
@@ -149,13 +153,38 @@ let WalletService = class WalletService {
         wallet.balance += amount;
         return this.walletRepository.save(wallet);
     }
+    async freezeWallet(userId) {
+        const wallet = await this.walletRepository.findOne({
+            where: { user: { id: userId } },
+            relations: ['user'],
+        });
+        if (!wallet)
+            throw new Error('Wallet not found');
+        wallet.isFrozen = true;
+        await this.walletRepository.save(wallet);
+        return { message: 'WALLET FROZEN' };
+    }
+    async unfreezeWallet(userId) {
+        const wallet = await this.walletRepository.findOne({
+            where: { user: { id: userId } },
+            relations: ['user'],
+        });
+        if (!wallet)
+            throw new Error('Wallet not found');
+        wallet.isFrozen = false;
+        await this.walletRepository.save(wallet);
+        return { message: 'WALLET UNFROZEN' };
+    }
 };
 exports.WalletService = WalletService;
 exports.WalletService = WalletService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_1.InjectRepository)(transaction_entity_1.Transaction)),
-    __param(1, (0, typeorm_1.InjectRepository)(wallet_entity_1.Wallet)),
-    __metadata("design:paramtypes", [typeorm_2.Repository,
+    __param(1, (0, typeorm_1.InjectRepository)(transaction_entity_1.Transaction)),
+    __param(2, (0, typeorm_1.InjectRepository)(wallet_entity_1.Wallet)),
+    __param(3, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
+    __metadata("design:paramtypes", [typeorm_3.DataSource,
+        typeorm_2.Repository,
+        typeorm_2.Repository,
         typeorm_2.Repository])
 ], WalletService);
 //# sourceMappingURL=wallet.service.js.map
