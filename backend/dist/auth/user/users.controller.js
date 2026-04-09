@@ -33,8 +33,8 @@ let UsersController = class UsersController {
     getAllUsers() {
         return this.usersService.getAllUsers();
     }
-    getMe(req) {
-        return req.user;
+    async getMe(req) {
+        return this.usersService.findById(req.user.id);
     }
 };
 exports.UsersController = UsersController;
@@ -70,7 +70,7 @@ __decorate([
     __param(0, (0, common_1.Request)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getMe", null);
 exports.UsersController = UsersController = __decorate([
     (0, common_1.Controller)('users'),

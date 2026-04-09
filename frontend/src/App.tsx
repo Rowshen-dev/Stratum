@@ -2,12 +2,47 @@ import { useState, useEffect } from 'react';
 import Login from './pages/Login';
 import Transfer from './pages/Transfer';
 import History from './pages/History';
-import { getMe } from './api/api';
+import { getMe, deposit, withdraw } from './api/api';
 import Register from './pages/Register';
 
 function App() {
   const [page, setPage] = useState<'login' | 'register' | 'dashboard' | 'transfer' | 'history'>('login');
   const [user, setUser] = useState<any>(null);
+  const [amount, setAmount] = useState('');
+const [loading, setLoading] = useState(false);
+
+
+
+const handleDeposit = async () => {
+  if (!amount) return;
+  setLoading(true);
+  try {
+    await deposit(Number(amount));
+    const res = await getMe();
+    setUser(res.data);
+    setAmount('');
+    alert('✅ Депозит успешно!');
+  } catch (err: any) {
+    alert(err.response?.data?.message || 'Ошибка');
+  }
+  setLoading(false);
+};
+
+const handleWithdraw = async () => {
+  if (!amount) return;
+  setLoading(true);
+  try {
+    await withdraw(Number(amount));
+    const res = await getMe();
+    setUser(res.data);
+    setAmount('');
+    alert('✅ Вывод успешно!');
+  } catch (err: any) {
+    alert(err.response?.data?.message || 'Ошибка');
+  }
+  setLoading(false);
+};
+
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -77,7 +112,7 @@ function App() {
           boxShadow: '0 8px 32px rgba(108,71,255,0.25)'
         }}>
           <p style={{ margin: 0, opacity: 0.85, fontSize: 15 }}>Общий баланс</p>
-          <h1 style={{ margin: '8px 0', fontSize: 48, fontWeight: 800, letterSpacing: -1 }}>
+          <h1 style={{ margin: '8px 0', fontSize: '32px', color: 'lime' }}>
             ${Number(user?.wallet?.balance ?? 0).toFixed(2)}
           </h1>
           <p style={{ margin: 0, opacity: 0.7, fontSize: 13 }}>
@@ -121,6 +156,64 @@ function App() {
             <div>
               <h3 style={{ color: '#6c47ff', marginTop: 0 }}>👋 Добро пожаловать в Cortex!</h3>
               <p style={{ color: '#666' }}>Используйте меню выше для переводов и истории транзакций.</p>
+              {/* DEPOSIT / WITHDRAW */}
+                <div style={{
+                  background: '#f8f5ff',
+                  borderRadius: 16,
+                  padding: '24px',
+                  marginTop: 20,
+                  border: '1px solid #ede9ff',
+                }}>
+                  <h4 style={{ margin: '0 0 16px', color: '#6c47ff', fontSize: 15 }}>
+                    💰 Пополнить / Вывести
+                  </h4>
+                  <input
+                    type="number"
+                    placeholder="Введите сумму"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '12px 14px',
+                      borderRadius: 10,
+                      border: '1.5px solid #e0d9ff',
+                      fontSize: 15,
+                      marginBottom: 12,
+                      boxSizing: 'border-box' as const,
+                      outline: 'none',
+                    }}
+                  />
+                  <div style={{ display: 'flex', gap: 10 }}>
+                    <button
+                      onClick={handleDeposit}
+                      disabled={loading}
+                      style={{
+                        flex: 1, padding: '12px',
+                        borderRadius: 10, border: 'none',
+                        background: '#6c47ff', color: 'white',
+                        fontWeight: 700, fontSize: 14,
+                        cursor: 'pointer',
+                      }}
+                    >
+                      ⬇ Депозит
+                    </button>
+                    <button
+                      onClick={handleWithdraw}
+                      disabled={loading}
+                      style={{
+                        flex: 1, padding: '12px',
+                        borderRadius: 10, border: 'none',
+                        background: 'white', color: '#6c47ff',
+                        fontWeight: 700, fontSize: 14,
+                        cursor: 'pointer',
+                        outline: '2px solid #6c47ff',
+                      }}
+                    >
+                      ⬆ Вывод
+                    </button>
+                  </div>
+                </div>
+
               <div style={{ display: 'flex', gap: 16, marginTop: 20 }}>
                 <div style={{ flex: 1, background: '#f8f5ff', borderRadius: 12, padding: 20 }}>
                   <div style={{ fontSize: 28 }}>💸</div>

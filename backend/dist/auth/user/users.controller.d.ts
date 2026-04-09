@@ -5,5 +5,5 @@ export declare class UsersController {
     blockUser(id: string): Promise<import("./user.entity").User>;
     unblockUser(id: string): Promise<import("./user.entity").User>;
     getAllUsers(): Promise<import("./user.entity").User[]>;
-    getMe(req: any): any;
+    getMe(req: any): Promise<import("./user.entity").User | null>;
 }

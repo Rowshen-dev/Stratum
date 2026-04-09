@@ -45,6 +45,8 @@ return this.userRepository.find();
 async findById(id: number) {
   return this.userRepository.findOne({
     where: { id },
+    relations: ['wallet'],
   });
 }
+
 }

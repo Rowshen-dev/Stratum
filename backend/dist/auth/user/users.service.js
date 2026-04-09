@@ -48,6 +48,7 @@ let UsersService = class UsersService {
     async findById(id) {
         return this.userRepository.findOne({
             where: { id },
+            relations: ['wallet'],
         });
     }
 };

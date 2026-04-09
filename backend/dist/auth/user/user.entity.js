@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const typeorm_1 = require("typeorm");
 const role_enum_1 = require("../roles/role.enum");
+const wallet_entity_1 = require("../../wallet/wallet.entity");
 let User = class User {
     id;
     email;
@@ -19,6 +20,7 @@ let User = class User {
     balance;
     role;
     isBlocked;
+    wallet;
 };
 exports.User = User;
 __decorate([
@@ -49,6 +51,10 @@ __decorate([
     (0, typeorm_1.Column)({ default: false }),
     __metadata("design:type", Boolean)
 ], User.prototype, "isBlocked", void 0);
+__decorate([
+    (0, typeorm_1.OneToOne)(() => wallet_entity_1.Wallet, (wallet) => wallet.user),
+    __metadata("design:type", wallet_entity_1.Wallet)
+], User.prototype, "wallet", void 0);
 exports.User = User = __decorate([
     (0, typeorm_1.Entity)()
 ], User);

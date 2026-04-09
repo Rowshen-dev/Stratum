@@ -31,8 +31,8 @@ getAllUsers() {
 
 @Get('me')
 @UseGuards(JwtAuthGuard)
-getMe(@Request() req) {
-  return req.user;
+async getMe(@Request() req) {
+  return this.usersService.findById(req.user.id);
 }
 
 

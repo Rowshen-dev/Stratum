@@ -21,3 +21,12 @@ export const setToken = (token: string) => {
 export const getMe = () => {
   return api.get('/users/me');
 };
+
+export const deposit = (amount: number) => {
+  return api.post('/wallet/deposit', { amount });
+};
+
+export const withdraw = (amount: number) => {
+  return api.post('/wallet/withdraw', { amount });
+};
+

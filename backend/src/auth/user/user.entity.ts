@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm';
 import { Role } from '../roles/role.enum';
+import { Wallet } from '../../wallet/wallet.entity';
 
 @Entity()
 export class User {
@@ -14,16 +15,19 @@ export class User {
   password: string;
 
   @Column({ default: 1000 })
-balance: number;
+  balance: number;
 
-@Column ({
-type: 'enum',
-enum: Role,
-default: Role.USER,
-})
-role:Role;
+  @Column({
+    type: 'enum',
+    enum: Role,
+    default: Role.USER,
+  })
+  role: Role;
 
-@Column({ default: false })
-isBlocked: boolean;
+  @Column({ default: false })
+  isBlocked: boolean;
+
+  @OneToOne(() => Wallet, (wallet) => wallet.user)
+  wallet: Wallet;
 
 }
