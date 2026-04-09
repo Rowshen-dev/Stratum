@@ -112,7 +112,7 @@ const handleWithdraw = async () => {
           boxShadow: '0 8px 32px rgba(108,71,255,0.25)'
         }}>
           <p style={{ margin: 0, opacity: 0.85, fontSize: 15 }}>Общий баланс</p>
-          <h1 style={{ margin: '8px 0', fontSize: '32px', color: 'lime' }}>
+          <h1 style={{ margin: '8px 0', fontSize: '52px', fontWeight: 800, letterSpacing: '-2px', color: 'lime' }}>
             ${Number(user?.wallet?.balance ?? 0).toFixed(2)}
           </h1>
           <p style={{ margin: 0, opacity: 0.7, fontSize: 13 }}>
@@ -123,9 +123,10 @@ const handleWithdraw = async () => {
         {/* QUICK ACTIONS */}
         <div style={{ display: 'flex', gap: 16, marginBottom: 28 }}>
           {[
+            { icon: '🏠', label: 'Главная', key: 'dashboard' },
             { icon: '💸', label: 'Перевод', key: 'transfer' },
             { icon: '📋', label: 'История', key: 'history' },
-            { icon: '🏠', label: 'Главная', key: 'dashboard' },
+
           ].map((item) => (
             <button
               key={item.key}
