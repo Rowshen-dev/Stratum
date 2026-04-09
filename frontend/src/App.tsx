@@ -4,12 +4,18 @@ import Transfer from './pages/Transfer';
 import History from './pages/History';
 import { getMe, deposit, withdraw } from './api/api';
 import Register from './pages/Register';
+import Toast from './components/Toast';
 
 function App() {
   const [page, setPage] = useState<'login' | 'register' | 'dashboard' | 'transfer' | 'history'>('login');
   const [user, setUser] = useState<any>(null);
   const [amount, setAmount] = useState('');
-const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+
+  const showToast = (message: string, type: 'success' | 'error') => {
+    setToast({ message, type });
+  };
 
 
 
@@ -21,9 +27,9 @@ const handleDeposit = async () => {
     const res = await getMe();
     setUser(res.data);
     setAmount('');
-    alert('✅ Депозит успешно!');
+    showToast('Депозит выполнен успешно!', 'success');
   } catch (err: any) {
-    alert(err.response?.data?.message || 'Ошибка');
+    showToast(err.response?.data?.message || 'Ошибка', 'error');
   }
   setLoading(false);
 };
@@ -36,9 +42,9 @@ const handleWithdraw = async () => {
     const res = await getMe();
     setUser(res.data);
     setAmount('');
-    alert('✅ Вывод успешно!');
+    showToast('Депозит выполнен успешно!', 'success');
   } catch (err: any) {
-    alert(err.response?.data?.message || 'Ошибка');
+    showToast(err.response?.data?.message || 'Ошибка', 'error');
   }
   setLoading(false);
 };
@@ -239,6 +245,13 @@ const handleWithdraw = async () => {
         </div>
 
       </div>
+      {toast && (
+        <Toast
+        message={toast.message}
+        type={toast.type}
+        onClose={() => setToast(null)}
+        />
+      )}
     </div>
   );
 }
