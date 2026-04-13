@@ -27,13 +27,16 @@ exports.AppModule = AppModule = __decorate([
         imports: [
             typeorm_1.TypeOrmModule.forRoot({
                 type: 'postgres',
-                host: 'localhost',
-                port: 5432,
-                username: 'postgres',
-                password: '',
-                database: 'cortex',
+                host: process.env.PGHOST,
+                port: Number(process.env.PGPORT) || 5432,
+                username: process.env.PGUSER,
+                password: process.env.PGPASSWORD,
+                database: process.env.PGDATABASE,
                 entities: [user_entity_1.User, role_entity_1.Role, wallet_entity_1.Wallet, transaction_entity_1.Transaction],
                 synchronize: true,
+                ssl: {
+                    rejectUnauthorized: false,
+                },
             }),
             auth_module_1.AuthModule,
             wallet_module_1.WalletModule,

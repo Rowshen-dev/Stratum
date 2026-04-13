@@ -14,18 +14,20 @@ import { UsersModule } from './auth/user/users.module';
 
 @Module({
   imports: [
-   TypeOrmModule.forRoot({
+ TypeOrmModule.forRoot({
   type: 'postgres',
-  host: 'localhost',
-  port: 5432,
-  username: 'postgres',
-  password: '',
-  database: 'cortex',
-
+  host: process.env.PGHOST,
+  port: Number(process.env.PGPORT) || 5432,
+  username: process.env.PGUSER,
+  password: process.env.PGPASSWORD,
+  database: process.env.PGDATABASE,
   entities: [User, Role, Wallet, Transaction],
-
   synchronize: true,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 }),
+
     AuthModule,
     WalletModule,
     TransactionsModule,
