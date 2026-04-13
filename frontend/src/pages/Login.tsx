@@ -30,7 +30,7 @@ export default function Login({ onSuccess, onGoRegister }: LoginProps) {
 
   return (
     <div style={{ padding: 20, maxWidth: 400, margin: '100px auto', fontFamily: 'Arial' }}>
-      <h2 style={{ color: '#6c47ff' }}>💳 Cortex — Вход</h2>
+      <h2 style={{ color: '#0F4C81' }}>💳 Cortex — Вход</h2>
 
       <input
         placeholder="email"
@@ -54,7 +54,7 @@ export default function Login({ onSuccess, onGoRegister }: LoginProps) {
         Нет аккаунта?{' '}
         <span
           onClick={onGoRegister}
-          style={{ color: '#6c47ff', fontWeight: 600, cursor: 'pointer' }}
+          style={{ color: '#0F4C81', fontWeight: 600, cursor: 'pointer' }}
         >
           Зарегистрироваться
         </span>
@@ -76,7 +76,7 @@ const btnStyle = {
   padding: '12px',
   borderRadius: '8px',
   border: 'none',
-  background: '#6c47ff',
+  background: '#0F4C81',
   color: 'white',
   fontSize: '16px',
   fontWeight: 'bold' as const,

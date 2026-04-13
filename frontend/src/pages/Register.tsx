@@ -23,7 +23,7 @@ export default function Register({ onGoLogin }: RegisterProps) {
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#f0f2ff',
+      background: '#f0f4f8',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -35,14 +35,14 @@ export default function Register({ onGoLogin }: RegisterProps) {
         padding: '48px 40px',
         width: 380,
         boxShadow: '0 4px 24px rgba(108,71,255,0.10)',
-        border: '1px solid #ede9ff',
+        border: '1px solid #c5d8f0',
       }}>
 
         {/* LOGO */}
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
           <div style={{
             width: 52, height: 52, borderRadius: 14,
-            background: '#6c47ff', margin: '0 auto 12px',
+            background: '#0F4C81', margin: '0 auto 12px',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
             <span style={{ color: 'white', fontWeight: 900, fontSize: 24 }}>C</span>
@@ -95,7 +95,7 @@ export default function Register({ onGoLogin }: RegisterProps) {
         <button onClick={handleRegister} style={{
           width: '100%', padding: '13px',
           borderRadius: 10, border: 'none',
-          background: '#6c47ff', color: 'white',
+          background: '#0F4C81', color: 'white',
           fontSize: 15, fontWeight: 700, cursor: 'pointer',
           marginBottom: 16,
         }}>
@@ -107,7 +107,7 @@ export default function Register({ onGoLogin }: RegisterProps) {
           Уже есть аккаунт?{' '}
           <span
             onClick={onGoLogin}
-            style={{ color: '#6c47ff', fontWeight: 600, cursor: 'pointer' }}
+            style={{ color: '#0F4C81', fontWeight: 600, cursor: 'pointer' }}
           >
             Войти
           </span>
@@ -122,7 +122,7 @@ const inputStyle: React.CSSProperties = {
   width: '100%',
   padding: '12px 14px',
   borderRadius: 10,
-  border: '1.5px solid #e8e0ff',
+  border: '1.5px solid #c5d8f0',
   fontSize: 14,
   outline: 'none',
   boxSizing: 'border-box',

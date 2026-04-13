@@ -1,7 +1,12 @@
 import { useState } from 'react';
 import { api } from '../api/api';
 
-export default function Transfer() {
+interface TransferProps {
+  onToast: (message: string, type: 'success' | 'error') => void;
+}
+
+
+export default function Transfer({ onToast }: TransferProps) {
   const [toUserId, setToUserId] = useState('');
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
@@ -20,7 +25,7 @@ export default function Transfer() {
       setToUserId('');
       setAmount('');
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Ошибка перевода');
+     onToast(err.response?.data?.message || 'Ошибка перевода', 'error');
     }
     setLoading(false);
   };
@@ -95,7 +100,7 @@ export default function Transfer() {
           padding: '14px',
           borderRadius: 12,
           border: 'none',
-          background: loading ? '#a78bfa' : '#6c47ff',
+          background: loading ? '#1a6dbd' : '#0F4c81',
           color: 'white',
           fontSize: 15,
           fontWeight: 700,
@@ -115,9 +120,9 @@ export default function Transfer() {
         border: '1px solid #ede9ff',
       }}>
         <p style={{ margin: 0, fontSize: 12, color: '#888', lineHeight: 1.6 }}>
-          ℹ️ Комиссия за перевод: <strong style={{ color: '#6c47ff' }}>1%</strong><br />
-          Минимальная сумма: <strong style={{ color: '#6c47ff' }}>$1</strong><br />
-          Максимальная сумма: <strong style={{ color: '#6c47ff' }}>$100,000</strong>
+          ℹ️ Комиссия за перевод: <strong style={{ color: '#0F4C81' }}>1%</strong><br />
+          Минимальная сумма: <strong style={{ color: '#0F4C81' }}>$1</strong><br />
+          Максимальная сумма: <strong style={{ color: '#0F4C81' }}>$100,000</strong>
         </p>
       </div>
     </div>
