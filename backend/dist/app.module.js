@@ -34,9 +34,9 @@ exports.AppModule = AppModule = __decorate([
                 database: process.env.PGDATABASE,
                 entities: [user_entity_1.User, role_entity_1.Role, wallet_entity_1.Wallet, transaction_entity_1.Transaction],
                 synchronize: true,
-                ssl: {
+                ssl: process.env.NODE_ENV === 'production' ? {
                     rejectUnauthorized: false,
-                },
+                } : false,
             }),
             auth_module_1.AuthModule,
             wallet_module_1.WalletModule,

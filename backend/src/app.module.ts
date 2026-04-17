@@ -23,9 +23,10 @@ import { UsersModule } from './auth/user/users.module';
   database: process.env.PGDATABASE,
   entities: [User, Role, Wallet, Transaction],
   synchronize: true,
-  ssl: {
-    rejectUnauthorized: false,
-  },
+  ssl: process.env.NODE_ENV === 'production' ? {
+  rejectUnauthorized: false,
+} : false,
+
 }),
 
     AuthModule,
