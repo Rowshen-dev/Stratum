@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { api } from '../api/api';
+import { api, setToken } from '../api/api';
 
 interface RegisterProps {
   onGoLogin: () => void;
@@ -13,8 +13,14 @@ export default function Register({ onGoLogin }: RegisterProps) {
   const handleRegister = async () => {
     try {
       await api.post('/auth/register', { username, email, password });
-      alert('Аккаунт создан! Войдите в систему.');
+
+      const loginRes = await api.post('/auth/login', { email, password });
+      const token = loginRes.data.access_token;
+      localStorage.setItem('token', token);
+      setToken(token);
+
       onGoLogin();
+
     } catch (err: any) {
       alert(JSON.stringify(err.response?.data));
     }
