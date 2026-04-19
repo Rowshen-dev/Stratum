@@ -5,6 +5,8 @@ import History from './pages/History';
 import Admin from './pages/Admin';
 import Toast from './components/Toast';
 import { getMe, deposit, withdraw } from './api/api';
+import Register from './pages/Register';
+
 
 const ACCENT = '#0F4C81';
 const ACCENT_LIGHT = '#e8f0fa';
@@ -71,6 +73,8 @@ function App() {
   };
 
   if (page === 'login') return <Login onSuccess={handleLoginSuccess} onGoRegister={() => setPage('register')} />;
+if (page === 'register') return <Register onGoLogin={handleLoginSuccess} />;
+
 
   const navItems = [
     { icon: '🏠', label: 'Главная', key: 'dashboard' },
