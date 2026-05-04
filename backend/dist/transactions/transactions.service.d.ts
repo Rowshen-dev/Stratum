@@ -1,10 +1,12 @@
 import { Transaction } from './transaction.entity';
 import { Repository } from 'typeorm';
 import { User } from 'src/auth/user/user.entity';
+import { Wallet } from 'src/wallet/wallet.entity';
 export declare class TransactionsService {
     private transactionRepository;
     private userRepository;
-    constructor(transactionRepository: Repository<Transaction>, userRepository: Repository<User>);
+    private walletRepository;
+    constructor(transactionRepository: Repository<Transaction>, userRepository: Repository<User>, walletRepository: Repository<Wallet>);
     getMyTransactions(userId: number, page?: number, limit?: number): Promise<{
         total: number;
         page: number;

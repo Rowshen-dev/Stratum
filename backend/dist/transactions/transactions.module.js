@@ -13,12 +13,13 @@ const transaction_entity_1 = require("./transaction.entity");
 const transactions_service_1 = require("./transactions.service");
 const transactions_controller_1 = require("./transactions.controller");
 const user_entity_1 = require("../auth/user/user.entity");
+const wallet_entity_1 = require("../wallet/wallet.entity");
 let TransactionsModule = class TransactionsModule {
 };
 exports.TransactionsModule = TransactionsModule;
 exports.TransactionsModule = TransactionsModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([transaction_entity_1.Transaction, user_entity_1.User,])],
+        imports: [typeorm_1.TypeOrmModule.forFeature([transaction_entity_1.Transaction, user_entity_1.User, wallet_entity_1.Wallet])],
         providers: [transactions_service_1.TransactionsService],
         controllers: [transactions_controller_1.TransactionsController],
     })

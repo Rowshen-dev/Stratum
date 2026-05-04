@@ -18,12 +18,15 @@ const typeorm_1 = require("@nestjs/typeorm");
 const transaction_entity_1 = require("./transaction.entity");
 const typeorm_2 = require("typeorm");
 const user_entity_1 = require("../auth/user/user.entity");
+const wallet_entity_1 = require("../wallet/wallet.entity");
 let TransactionsService = class TransactionsService {
     transactionRepository;
     userRepository;
-    constructor(transactionRepository, userRepository) {
+    walletRepository;
+    constructor(transactionRepository, userRepository, walletRepository) {
         this.transactionRepository = transactionRepository;
         this.userRepository = userRepository;
+        this.walletRepository = walletRepository;
     }
     async getMyTransactions(userId, page = 1, limit = 5) {
         const skip = (page - 1) * limit;
@@ -50,12 +53,7 @@ let TransactionsService = class TransactionsService {
                 date: t.createdAt,
             };
         }).filter(Boolean);
-        return {
-            total,
-            page,
-            limit,
-            data,
-        };
+        return { total, page, limit, data };
     }
     async getAllTransactions() {
         return this.transactionRepository.find({
@@ -67,28 +65,25 @@ let TransactionsService = class TransactionsService {
         if (fromUserId === toUserId) {
             throw new Error('Cannot send to yourself');
         }
-        const fromUser = await this.userRepository.findOne({
-            where: { id: fromUserId },
-        });
-        const toUser = await this.userRepository.findOne({
-            where: { id: toUserId },
-        });
-        if (!fromUser) {
+        const fromUser = await this.userRepository.findOne({ where: { id: fromUserId } });
+        const toUser = await this.userRepository.findOne({ where: { id: toUserId } });
+        if (!fromUser)
             throw new Error('Sender not found');
-        }
-        if (!toUser) {
+        if (!toUser)
             throw new Error('Receiver not found');
-        }
-        if (!toUser) {
-            throw new Error('Receiver not found');
-        }
-        if (fromUser.balance < amount) {
+        const fromWallet = await this.walletRepository.findOne({ where: { user: { id: fromUserId } } });
+        const toWallet = await this.walletRepository.findOne({ where: { user: { id: toUserId } } });
+        if (!fromWallet)
+            throw new Error('Sender wallet not found');
+        if (!toWallet)
+            throw new Error('Receiver wallet not found');
+        if (fromWallet.balance < amount) {
             throw new Error('Not enough balance');
         }
-        fromUser.balance -= amount;
-        toUser.balance += amount;
-        await this.userRepository.save(fromUser);
-        await this.userRepository.save(toUser);
+        fromWallet.balance -= amount;
+        toWallet.balance += amount;
+        await this.walletRepository.save(fromWallet);
+        await this.walletRepository.save(toWallet);
         const transaction = this.transactionRepository.create({
             amount,
             fromUser,
@@ -102,7 +97,9 @@ exports.TransactionsService = TransactionsService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(transaction_entity_1.Transaction)),
     __param(1, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
+    __param(2, (0, typeorm_1.InjectRepository)(wallet_entity_1.Wallet)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository,
         typeorm_2.Repository])
 ], TransactionsService);
 //# sourceMappingURL=transactions.service.js.map
