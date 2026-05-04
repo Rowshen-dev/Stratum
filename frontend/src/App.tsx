@@ -245,7 +245,7 @@ if (page === 'register') return <Register onGoLogin={handleLoginSuccess} />;
               </div>
             </div>
           )}
-          {page === 'transfer' && <Transfer onToast={showToast} />}
+          {page === 'transfer' && <Transfer onToast={showToast} onSuccess={() => getMe().then(res => setUser(res.data))} />}
           {page === 'history' && <History />}
           {page === 'admin' && <Admin onToast={showToast} />}
         </div>

@@ -3,10 +3,11 @@ import { api } from '../api/api';
 
 interface TransferProps {
   onToast: (message: string, type: 'success' | 'error') => void;
+  onSuccess: () => void;
 }
 
 
-export default function Transfer({ onToast }: TransferProps) {
+export default function Transfer({ onToast, onSuccess }: TransferProps) {
   const [toUserId, setToUserId] = useState('');
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
@@ -24,6 +25,7 @@ export default function Transfer({ onToast }: TransferProps) {
       setSuccess(true);
       setToUserId('');
       setAmount('');
+      onSuccess();
     } catch (err: any) {
      onToast(err.response?.data?.message || 'Ошибка перевода', 'error');
     }
