@@ -106,7 +106,7 @@ if (page === 'register') return <Register onGoLogin={handleLoginSuccess} />;
             <span style={{ color: 'white', fontWeight: 900, fontSize: 16 }}>C</span>
           </div>
           <span style={{ fontSize: 18, fontWeight: 800, color: ACCENT, letterSpacing: -0.5 }}>
-            CORTEX
+            STRATUM
           </span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
@@ -146,7 +146,7 @@ if (page === 'register') return <Register onGoLogin={handleLoginSuccess} />;
             ${Number(user?.wallet?.balance ?? 0).toFixed(2)}
           </h1>
           <p style={{ margin: 0, color: 'rgba(255,255,255,0.6)', fontSize: 12 }}>
-            Cortex Wallet • {user?.email}
+            Stratum Wallet • {user?.email}
           </p>
         </div>
 
@@ -183,7 +183,7 @@ if (page === 'register') return <Register onGoLogin={handleLoginSuccess} />;
                 Добро пожаловать 👋
               </h3>
               <p style={{ color: '#888', fontSize: 14, marginBottom: 24 }}>
-                Управляйте своими финансами с Cortex
+                Управляйте своими финансами со STRATUM
               </p>
 
               {/* DEPOSIT / WITHDRAW */}

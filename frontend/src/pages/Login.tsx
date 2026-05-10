@@ -30,7 +30,7 @@ export default function Login({ onSuccess, onGoRegister }: LoginProps) {
 
   return (
     <div style={{ padding: 20, maxWidth: 400, margin: '100px auto', fontFamily: 'Arial' }}>
-      <h2 style={{ color: '#0F4C81' }}>💳 Cortex — Вход</h2>
+      <h2 style={{ color: '#0F4C81' }}>💳 STRATUM — Вход</h2>
 
       <input
         placeholder="email"

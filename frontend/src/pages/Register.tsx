@@ -53,7 +53,7 @@ export default function Register({ onGoLogin }: RegisterProps) {
           }}>
             <span style={{ color: 'white', fontWeight: 900, fontSize: 24 }}>C</span>
           </div>
-          <h2 style={{ margin: 0, fontSize: 22, fontWeight: 800, color: '#111' }}>CORTEX</h2>
+          <h2 style={{ margin: 0, fontSize: 22, fontWeight: 800, color: '#111' }}>STRATUM</h2>
           <p style={{ margin: '6px 0 0', color: '#888', fontSize: 13 }}>Создайте аккаунт</p>
         </div>
 
