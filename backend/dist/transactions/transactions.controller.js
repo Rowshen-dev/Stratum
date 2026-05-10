@@ -32,7 +32,7 @@ let TransactionsController = class TransactionsController {
         return this.transactionsService.getAllTransactions();
     }
     transfer(req, body) {
-        return this.transactionsService.transfer(req.user.id, body.toUserId, body.amount);
+        return this.transactionsService.transferByEmail(req.user.id, body.toEmail, body.amount);
     }
 };
 exports.TransactionsController = TransactionsController;

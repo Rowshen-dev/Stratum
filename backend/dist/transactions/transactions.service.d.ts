@@ -20,4 +20,5 @@ export declare class TransactionsService {
     }>;
     getAllTransactions(): Promise<Transaction[]>;
     transfer(fromUserId: number, toUserId: number, amount: number): Promise<Transaction>;
+    transferByEmail(fromUserId: number, toEmail: string, amount: number): Promise<Transaction>;
 }

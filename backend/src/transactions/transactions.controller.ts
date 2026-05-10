@@ -30,11 +30,11 @@ getAllTransactions() {
 @UseGuards(JwtAuthGuard)
 transfer(
   @Req() req,
-  @Body() body: { toUserId: number; amount: number },
+  @Body() body: { toEmail: string; amount: number },
 ) {
-  return this.transactionsService.transfer(
+  return this.transactionsService.transferByEmail(
     req.user.id,
-    body.toUserId,
+    body.toEmail,
     body.amount,
   );
 }

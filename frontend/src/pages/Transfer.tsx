@@ -8,22 +8,22 @@ interface TransferProps {
 
 
 export default function Transfer({ onToast, onSuccess }: TransferProps) {
-  const [toUserId, setToUserId] = useState('');
+  const [toEmail, setToEmail] = useState('');
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const handleSend = async () => {
-    if (!toUserId || !amount) return;
+    if (!toEmail || !amount) return;
     setLoading(true);
     setSuccess(false);
     try {
-      await api.post('/transactions/transfer', {
-        toUserId: Number(toUserId),
+     await api.post('/transactions/transfer', {
+        toEmail,
         amount: Number(amount),
       });
       setSuccess(true);
-      setToUserId('');
+      setToEmail('');
       setAmount('');
       onSuccess();
     } catch (err: any) {
@@ -64,13 +64,13 @@ export default function Transfer({ onToast, onSuccess }: TransferProps) {
           fontWeight: 600, display: 'block', marginBottom: 6,
           letterSpacing: 0.5,
         }}>
-          ID ПОЛУЧАТЕЛЯ
+          EMAIL ПОЛУЧАТЕЛЯ
         </label>
         <input
-          placeholder="Например: 2"
-          value={toUserId}
-          onChange={(e) => setToUserId(e.target.value)}
-          type="number"
+          placeholder="email@example.com"
+          value={toEmail}
+          onChange={(e) => setToEmail(e.target.value)}
+          type="email"
           style={inputStyle}
         />
       </div>

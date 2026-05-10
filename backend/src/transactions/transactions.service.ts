@@ -90,4 +90,33 @@ export class TransactionsService {
 
     return this.transactionRepository.save(transaction);
   }
+  async transferByEmail(fromUserId: number, toEmail: string, amount: number) {
+  const toUser = await this.userRepository.findOne({ where: { email: toEmail } });
+  
+  if (!toUser) throw new Error('Пользователь с таким email не найден');
+  if (fromUserId === toUser.id) throw new Error('Нельзя отправить самому себе');
+
+  const fromWallet = await this.walletRepository.findOne({ where: { user: { id: fromUserId } } });
+  const toWallet = await this.walletRepository.findOne({ where: { user: { id: toUser.id } } });
+
+  if (!fromWallet) throw new Error('Кошелёк отправителя не найден');
+  if (!toWallet) throw new Error('Кошелёк получателя не найден');
+  if (fromWallet.balance < amount) throw new Error('Недостаточно средств');
+
+  fromWallet.balance -= amount;
+  toWallet.balance += amount;
+
+  await this.walletRepository.save(fromWallet);
+  await this.walletRepository.save(toWallet);
+
+  const fromUser = await this.userRepository.findOne({ where: { id: fromUserId } });
+
+  const transaction = this.transactionRepository.create({
+    amount,
+    fromUser,
+    toUser,
+  });
+
+  return this.transactionRepository.save(transaction);
+}
 }

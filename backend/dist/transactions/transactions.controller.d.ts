@@ -15,7 +15,7 @@ export declare class TransactionsController {
     }>;
     getAllTransactions(): Promise<import("./transaction.entity").Transaction[]>;
     transfer(req: any, body: {
-        toUserId: number;
+        toEmail: string;
         amount: number;
     }): Promise<import("./transaction.entity").Transaction>;
 }
