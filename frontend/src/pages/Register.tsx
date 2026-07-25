@@ -21,9 +21,10 @@ export default function Register({ onGoLogin }: RegisterProps) {
 
       onGoLogin();
 
-    } catch (err: any) {
-      alert(JSON.stringify(err.response?.data));
-    }
+  } catch (err: any) {
+  const msg = err.response?.data?.message || err.message || 'Ошибка регистрации';
+  alert(msg);
+}
   };
 
   return (
