@@ -9,76 +9,137 @@ interface LoginProps {
 export default function Login({ onSuccess, onGoRegister }: LoginProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
+    if (!email || !password) return;
+    setError('');
+    setLoading(true);
     try {
-      const res = await api.post('/auth/login', {
-        email,
-        password,
-      });
-
+      const res = await api.post('/auth/login', { email, password });
       const token = res.data.access_token;
-      setToken(token);
       localStorage.setItem('token', token);
-
-      onSuccess(); // ← вот это переключает на Dashboard
+      setToken(token);
+      onSuccess();
     } catch (err: any) {
-      console.log(err.response?.data);
-      alert(JSON.stringify(err.response?.data));
+      setError(err.response?.data?.message || 'Invalid credentials');
     }
+    setLoading(false);
   };
 
   return (
-    <div style={{ padding: 20, maxWidth: 400, margin: '100px auto', fontFamily: 'Arial' }}>
-      <h2 style={{ color: '#0F4C81' }}>💳 STRATUM — Вход</h2>
+    <div style={{
+      minHeight: '100vh',
+      background: '#ffffff',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif',
+      padding: '20px',
+    }}>
+      <div style={{ width: '100%', maxWidth: 360 }}>
 
-      <input
-        placeholder="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        style={inputStyle}
-      />
-      <br /><br />
-      <input
-        placeholder="password"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        style={inputStyle}
-      />
-      <br /><br />
-      <button onClick={handleLogin} style={btnStyle}>
-        Войти
-      </button>
-      <p style={{ textAlign: 'center', fontSize: 13, color: '#888', margin: '16px 0 0' }}>
-        Нет аккаунта?{' '}
-        <span
-          onClick={onGoRegister}
-          style={{ color: '#0F4C81', fontWeight: 600, cursor: 'pointer' }}
-        >
-          Зарегистрироваться
-        </span>
-      </p>
+        {/* Logo */}
+        <div style={{ textAlign: 'center', marginBottom: 32 }}>
+          <div style={{
+            width: 52, height: 52,
+            background: '#111',
+            borderRadius: 16,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto 20px',
+          }}>
+            <span style={{ color: '#fff', fontSize: 22, fontWeight: 700 }}>S</span>
+          </div>
+          <h1 style={{ fontSize: 24, fontWeight: 700, color: '#111', margin: '0 0 6px', letterSpacing: -0.5 }}>
+            Welcome back
+          </h1>
+          <p style={{ fontSize: 14, color: '#888', margin: 0 }}>Sign in to Stratum</p>
+        </div>
+
+        {/* Form */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div>
+            <label style={{ display: 'block', fontSize: 14, fontWeight: 500, color: '#111', marginBottom: 8 }}>
+              Email
+            </label>
+            <input
+              type="email"
+              placeholder="you@email.com"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleLogin()}
+              style={inputStyle}
+            />
+          </div>
+
+          <div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+              <label style={{ fontSize: 14, fontWeight: 500, color: '#111' }}>Password</label>
+              <span style={{ fontSize: 13, color: '#888', cursor: 'pointer' }}>Forgot?</span>
+            </div>
+            <input
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleLogin()}
+              style={inputStyle}
+            />
+          </div>
+
+          {error && (
+            <p style={{ fontSize: 13, color: '#ef4444', margin: 0 }}>{error}</p>
+          )}
+
+          <button
+            onClick={handleLogin}
+            disabled={loading}
+            style={{
+              width: '100%',
+              height: 48,
+              background: loading ? '#666' : '#2563EB',
+              color: '#fff',
+              border: 'none',
+              borderRadius: 12,
+              fontSize: 15,
+              fontWeight: 600,
+              cursor: loading ? 'not-allowed' : 'pointer',
+              marginTop: 4,
+              fontFamily: 'inherit',
+              transition: 'background 0.15s',
+            }}
+          >
+            {loading ? 'Signing in...' : 'Sign In'}
+          </button>
+        </div>
+
+        <p style={{ textAlign: 'center', fontSize: 14, color: '#888', marginTop: 24 }}>
+          Don't have an account?{' '}
+          <span
+            onClick={onGoRegister}
+            style={{ color: '#111', fontWeight: 600, cursor: 'pointer' }}
+          >
+            Sign up
+          </span>
+        </p>
+      </div>
     </div>
   );
 }
 
-const inputStyle = {
+const inputStyle: React.CSSProperties = {
   width: '100%',
-  padding: '12px',
-  borderRadius: '8px',
-  border: '1px solid #ccc',
-  fontSize: '16px',
-};
-
-const btnStyle = {
-  width: '100%',
-  padding: '12px',
-  borderRadius: '8px',
-  border: 'none',
-  background: '#0F4C81',
-  color: 'white',
-  fontSize: '16px',
-  fontWeight: 'bold' as const,
-  cursor: 'pointer',
+  height: 48,
+  padding: '0 14px',
+  background: '#f5f5f5',
+  border: '1px solid transparent',
+  borderRadius: 12,
+  fontSize: 15,
+  color: '#111',
+  outline: 'none',
+  boxSizing: 'border-box',
+  fontFamily: 'inherit',
 };
