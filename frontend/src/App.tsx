@@ -7,461 +7,29 @@ import Toast from './components/Toast';
 import { getMe, deposit, withdraw } from './api/api';
 import Register from './pages/Register';
 
-const styles = `
-  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    background: #020818;
-    font-family: 'DM Sans', sans-serif;
-    color: #e8edf5;
-    min-height: 100vh;
-  }
-
-  .stratum-app {
-    min-height: 100vh;
-    background: #020818;
-    position: relative;
-    overflow-x: hidden;
-  }
-
-  .stratum-app::before {
-    content: '';
-    position: fixed;
-    top: -200px;
-    left: -200px;
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(14, 90, 200, 0.15) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .stratum-app::after {
-    content: '';
-    position: fixed;
-    bottom: -200px;
-    right: -200px;
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, rgba(0, 180, 255, 0.08) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  /* NAV */
-  .nav {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(2, 8, 24, 0.85);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-    padding: 0 40px;
-    height: 64px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .nav-logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .nav-logo-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #0e5ac8, #00b4ff);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 16px;
-    color: white;
-    box-shadow: 0 0 20px rgba(0, 180, 255, 0.3);
-  }
-
-  .nav-logo-text {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 20px;
-    letter-spacing: 2px;
-    background: linear-gradient(90deg, #fff, #00b4ff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .nav-right {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-
-  .nav-avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #0e5ac8, #00b4ff);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 13px;
-    color: white;
-    box-shadow: 0 0 12px rgba(0, 180, 255, 0.25);
-  }
-
-  .nav-username {
-    font-size: 13px;
-    font-weight: 500;
-    color: rgba(255,255,255,0.7);
-  }
-
-  .nav-logout {
-    background: rgba(255,255,255,0.05);
-    color: rgba(255,255,255,0.5);
-    border: 1px solid rgba(255,255,255,0.08);
-    padding: 7px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 500;
-    transition: all 0.2s;
-    font-family: 'DM Sans', sans-serif;
-  }
-
-  .nav-logout:hover {
-    background: rgba(255,255,255,0.1);
-    color: white;
-  }
-
-  /* MAIN CONTENT */
-  .main {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 40px 20px;
-    position: relative;
-    z-index: 1;
-  }
-
-  /* BALANCE CARD */
-  .balance-card {
-    background: linear-gradient(135deg, #0a1628 0%, #0d2040 50%, #0a1628 100%);
-    border: 1px solid rgba(14, 90, 200, 0.3);
-    border-radius: 28px;
-    padding: 44px 48px;
-    margin-bottom: 28px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.05);
-  }
-
-  .balance-card::before {
-    content: '';
-    position: absolute;
-    top: -100px;
-    right: -100px;
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, rgba(0, 180, 255, 0.12) 0%, transparent 70%);
-    pointer-events: none;
-  }
-
-  .balance-card::after {
-    content: '';
-    position: absolute;
-    bottom: -50px;
-    left: -50px;
-    width: 200px;
-    height: 200px;
-    background: radial-gradient(circle, rgba(14, 90, 200, 0.1) 0%, transparent 70%);
-    pointer-events: none;
-  }
-
-  .balance-label {
-    font-size: 11px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.4);
-    font-weight: 500;
-    margin-bottom: 12px;
-  }
-
-  .balance-amount {
-    font-family: 'Syne', sans-serif;
-    font-size: 58px;
-    font-weight: 800;
-    letter-spacing: -2px;
-    background: linear-gradient(90deg, #ffffff, #00b4ff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    line-height: 1;
-    margin-bottom: 8px;
-  }
-
-  .balance-sub {
-    font-size: 12px;
-    color: rgba(255,255,255,0.3);
-    letter-spacing: 0.5px;
-  }
-
-  .balance-dot {
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #00b4ff;
-    margin-right: 6px;
-    box-shadow: 0 0 8px rgba(0, 180, 255, 0.8);
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
-
-  /* NAV TABS */
-  .nav-tabs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 24px;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 18px;
-    padding: 6px;
-  }
-
-  .nav-tab {
-    flex: 1;
-    padding: 14px 0;
-    border-radius: 12px;
-    border: none;
-    background: transparent;
-    color: rgba(255,255,255,0.4);
-    font-weight: 600;
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: 'DM Sans', sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .nav-tab:hover {
-    color: rgba(255,255,255,0.7);
-    background: rgba(255,255,255,0.04);
-  }
-
-  .nav-tab.active {
-    background: linear-gradient(135deg, #0e5ac8, #0080e0);
-    color: white;
-    box-shadow: 0 4px 20px rgba(14, 90, 200, 0.4);
-  }
-
-  .nav-tab-icon {
-    font-size: 18px;
-  }
-
-  /* CONTENT CARD */
-  .content-card {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 24px;
-    padding: 36px;
-    backdrop-filter: blur(10px);
-  }
-
-  /* DEPOSIT/WITHDRAW SECTION */
-  .deposit-section {
-    background: rgba(14, 90, 200, 0.08);
-    border: 1px solid rgba(14, 90, 200, 0.2);
-    border-radius: 18px;
-    padding: 28px;
-    margin-bottom: 28px;
-  }
-
-  .section-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    color: rgba(255,255,255,0.8);
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .amount-input {
-    width: 100%;
-    padding: 14px 18px;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 12px;
-    font-size: 16px;
-    color: white;
-    outline: none;
-    margin-bottom: 14px;
-    font-family: 'DM Sans', sans-serif;
-    transition: border 0.2s;
-  }
-
-  .amount-input:focus {
-    border-color: rgba(0, 180, 255, 0.5);
-    background: rgba(0, 180, 255, 0.05);
-  }
-
-  .amount-input::placeholder {
-    color: rgba(255,255,255,0.2);
-  }
-
-  .btn-row {
-    display: flex;
-    gap: 12px;
-  }
-
-  .btn-primary {
-    flex: 1;
-    padding: 13px;
-    border-radius: 12px;
-    border: none;
-    background: linear-gradient(135deg, #0e5ac8, #0080e0);
-    color: white;
-    font-weight: 700;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: 'DM Sans', sans-serif;
-    box-shadow: 0 4px 16px rgba(14, 90, 200, 0.3);
-  }
-
-  .btn-primary:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(14, 90, 200, 0.4);
-  }
-
-  .btn-primary:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-  }
-
-  .btn-secondary {
-    flex: 1;
-    padding: 13px;
-    border-radius: 12px;
-    border: 1px solid rgba(255,255,255,0.12);
-    background: rgba(255,255,255,0.05);
-    color: rgba(255,255,255,0.8);
-    font-weight: 700;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: 'DM Sans', sans-serif;
-  }
-
-  .btn-secondary:hover {
-    background: rgba(255,255,255,0.1);
-    border-color: rgba(255,255,255,0.2);
-  }
-
-  .btn-secondary:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  /* FEATURE CARDS */
-  .feature-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
-  }
-
-  .feature-card {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 16px;
-    padding: 24px 20px;
-    transition: all 0.2s;
-    cursor: default;
-  }
-
-  .feature-card:hover {
-    background: rgba(255,255,255,0.05);
-    border-color: rgba(0, 180, 255, 0.2);
-    transform: translateY(-2px);
-  }
-
-  .feature-icon {
-    font-size: 28px;
-    margin-bottom: 12px;
-  }
-
-  .feature-title {
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 14px;
-    color: rgba(255,255,255,0.85);
-    margin-bottom: 4px;
-  }
-
-  .feature-desc {
-    font-size: 12px;
-    color: rgba(255,255,255,0.35);
-  }
-
-  /* WELCOME */
-  .welcome-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 22px;
-    font-weight: 800;
-    color: white;
-    margin-bottom: 6px;
-  }
-
-  .welcome-sub {
-    font-size: 14px;
-    color: rgba(255,255,255,0.35);
-    margin-bottom: 32px;
-  }
-`;
-
 function App() {
   const [page, setPage] = useState<'login' | 'register' | 'dashboard' | 'transfer' | 'history' | 'admin'>('login');
   const [user, setUser] = useState<any>(null);
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const showToast = (message: string, type: 'success' | 'error') => {
     setToast({ message, type });
   };
 
   useEffect(() => {
-    const styleEl = document.createElement('style');
-    styleEl.textContent = styles;
-    document.head.appendChild(styleEl);
-    return () => { document.head.removeChild(styleEl); };
-  }, []);
-
-  useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
       getMe()
-        .then((res) => { setUser(res.data); setPage('dashboard'); })
+        .then((res: any) => { setUser(res.data); setPage('dashboard'); })
         .catch(() => { localStorage.removeItem('token'); setPage('login'); });
     }
   }, []);
 
   const handleLoginSuccess = () => {
-    getMe().then((res) => { setUser(res.data); setPage('dashboard'); });
+    getMe().then((res: any) => { setUser(res.data); setPage('dashboard'); });
   };
 
   const handleLogout = () => {
@@ -478,9 +46,9 @@ function App() {
       const res = await getMe();
       setUser(res.data);
       setAmount('');
-      showToast('Депозит выполнен успешно!', 'success');
+      showToast('Deposit successful!', 'success');
     } catch (err: any) {
-      showToast(err.response?.data?.message || 'Ошибка', 'error');
+      showToast(err.response?.data?.message || 'Error', 'error');
     }
     setLoading(false);
   };
@@ -493,9 +61,9 @@ function App() {
       const res = await getMe();
       setUser(res.data);
       setAmount('');
-      showToast('Вывод выполнен успешно!', 'success');
+      showToast('Withdrawal successful!', 'success');
     } catch (err: any) {
-      showToast(err.response?.data?.message || 'Ошибка', 'error');
+      showToast(err.response?.data?.message || 'Error', 'error');
     }
     setLoading(false);
   };
@@ -503,109 +71,286 @@ function App() {
   if (page === 'login') return <Login onSuccess={handleLoginSuccess} onGoRegister={() => setPage('register')} />;
   if (page === 'register') return <Register onGoLogin={handleLoginSuccess} />;
 
+  const getHour = () => new Date().getHours();
+  const getGreeting = () => {
+    const h = getHour();
+    if (h < 12) return 'Good morning';
+    if (h < 18) return 'Good afternoon';
+    return 'Good evening';
+  };
+
   const navItems = [
-    { icon: '⌂', label: 'Главная', key: 'dashboard' },
-    { icon: '↗', label: 'Перевод', key: 'transfer' },
-    { icon: '≡', label: 'История', key: 'history' },
-    ...(user?.role === 'admin' ? [{ icon: '◈', label: 'Админ', key: 'admin' }] : []),
+    { icon: '⊞', label: 'Dashboard', key: 'dashboard' },
+    { icon: '⇄', label: 'Transfer', key: 'transfer' },
+    { icon: '◷', label: 'History', key: 'history' },
+    ...(user?.role === 'admin' ? [{ icon: '◈', label: 'Admin', key: 'admin' }] : []),
   ];
 
+  const balance = Number(user?.wallet?.balance ?? 0);
+
   return (
-    <div className="stratum-app">
-      {/* NAV */}
-      <nav className="nav">
-        <div className="nav-logo">
-          <div className="nav-logo-icon">S</div>
-          <span className="nav-logo-text">STRATUM</span>
-        </div>
-        <div className="nav-right">
-          <div className="nav-avatar">
-            {(user?.username || user?.email || 'U')[0].toUpperCase()}
+    <div style={{
+      minHeight: '100vh',
+      background: '#f8fafc',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    }}>
+
+      {/* TOP NAV */}
+      <nav style={{
+        background: '#fff',
+        borderBottom: '1px solid #f1f5f9',
+        padding: '0 20px',
+        height: 60,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        position: 'sticky',
+        top: 0,
+        zIndex: 100,
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{
+            width: 32, height: 32,
+            background: '#111',
+            borderRadius: 8,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <span style={{ color: '#fff', fontWeight: 700, fontSize: 14 }}>S</span>
           </div>
-          <span className="nav-username">{user?.username || user?.email}</span>
-          <button className="nav-logout" onClick={handleLogout}>Выйти</button>
+          <span style={{ fontSize: 17, fontWeight: 700, color: '#111', letterSpacing: -0.3 }}>Stratum</span>
         </div>
+
+        {/* Hamburger */}
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 8 }}
+        >
+          <div style={{ width: 20, height: 2, background: '#111', marginBottom: 4 }} />
+          <div style={{ width: 20, height: 2, background: '#111', marginBottom: 4 }} />
+          <div style={{ width: 20, height: 2, background: '#111' }} />
+        </button>
       </nav>
 
-      <div className="main">
-        {/* BALANCE */}
-        <div className="balance-card">
-          <div className="balance-label">Общий баланс</div>
-          <div className="balance-amount">
-            ${Number(user?.wallet?.balance ?? 0).toFixed(2)}
-          </div>
-          <div className="balance-sub">
-            <span className="balance-dot"></span>
-            Stratum Wallet • {user?.email}
-          </div>
-        </div>
-
-        {/* TABS */}
-        <div className="nav-tabs">
-          {navItems.map((item) => (
-            <button
-              key={item.key}
-              className={`nav-tab ${page === item.key ? 'active' : ''}`}
-              onClick={() => setPage(item.key as any)}
-            >
-              <span className="nav-tab-icon">{item.icon}</span>
-              {item.label}
-            </button>
-          ))}
-        </div>
-
-        {/* CONTENT */}
-        <div className="content-card">
-          {page === 'dashboard' && (
-            <div>
-              <div className="welcome-title">Добро пожаловать 👋</div>
-              <div className="welcome-sub">Управляйте своими финансами с Stratum</div>
-
-              <div className="deposit-section">
-                <div className="section-title">
-                  <span>💰</span> Пополнить / Вывести
+      {/* SLIDE-IN MENU */}
+      {menuOpen && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 200,
+        }}>
+          <div
+            onClick={() => setMenuOpen(false)}
+            style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.3)' }}
+          />
+          <div style={{
+            position: 'absolute', top: 0, right: 0, bottom: 0, width: 260,
+            background: '#fff',
+            padding: '24px 20px',
+            display: 'flex', flexDirection: 'column',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{ width: 32, height: 32, background: '#111', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <span style={{ color: '#fff', fontWeight: 700, fontSize: 14 }}>S</span>
                 </div>
-                <input
-                  type="number"
-                  placeholder="Введите сумму"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  className="amount-input"
-                />
-                <div className="btn-row">
-                  <button onClick={handleDeposit} disabled={loading} className="btn-primary">
-                    ⬇ Депозит
-                  </button>
-                  <button onClick={handleWithdraw} disabled={loading} className="btn-secondary">
-                    ⬆ Вывод
-                  </button>
-                </div>
+                <span style={{ fontWeight: 700, fontSize: 16, color: '#111' }}>Stratum</span>
               </div>
+              <button onClick={() => setMenuOpen(false)} style={{ background: 'none', border: 'none', fontSize: 20, cursor: 'pointer', color: '#888' }}>✕</button>
+            </div>
 
-              <div className="feature-grid">
-                {[
-                  { icon: '↗', title: 'Перевод', desc: 'Отправить деньги' },
-                  { icon: '📊', title: 'Аналитика', desc: 'Расходы и доходы' },
-                  { icon: '🔒', title: 'Защита', desc: 'Анти-фрод система' },
-                ].map((card) => (
-                  <div key={card.title} className="feature-card">
-                    <div className="feature-icon">{card.icon}</div>
-                    <div className="feature-title">{card.title}</div>
-                    <div className="feature-desc">{card.desc}</div>
-                  </div>
-                ))}
+            {navItems.map(item => (
+              <button
+                key={item.key}
+                onClick={() => { setPage(item.key as any); setMenuOpen(false); }}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 14,
+                  padding: '14px 16px',
+                  borderRadius: 12,
+                  border: 'none',
+                  background: page === item.key ? '#f1f5f9' : 'transparent',
+                  color: page === item.key ? '#111' : '#666',
+                  fontWeight: page === item.key ? 600 : 400,
+                  fontSize: 15,
+                  cursor: 'pointer',
+                  marginBottom: 4,
+                  textAlign: 'left',
+                  width: '100%',
+                }}
+              >
+                <span style={{ fontSize: 18 }}>{item.icon}</span>
+                {item.label}
+              </button>
+            ))}
+
+            <div style={{ marginTop: 'auto' }}>
+              <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: 16 }}>
+                <div style={{ fontSize: 13, color: '#888', marginBottom: 4 }}>{user?.email}</div>
+                <button
+                  onClick={handleLogout}
+                  style={{
+                    background: 'none', border: 'none',
+                    color: '#ef4444', fontSize: 14, fontWeight: 500,
+                    cursor: 'pointer', padding: 0,
+                  }}
+                >
+                  Sign out
+                </button>
               </div>
             </div>
-          )}
-          {page === 'transfer' && <Transfer onToast={showToast} onSuccess={() => getMe().then(res => setUser(res.data))} />}
-          {page === 'history' && <History />}
-          {page === 'admin' && <Admin onToast={showToast} />}
+          </div>
         </div>
+      )}
+
+      {/* MAIN CONTENT */}
+      <div style={{ maxWidth: 480, margin: '0 auto', padding: '24px 16px' }}>
+
+        {page === 'dashboard' && (
+          <>
+            {/* Greeting */}
+            <div style={{ marginBottom: 20 }}>
+              <h2 style={{ fontSize: 22, fontWeight: 700, color: '#111', margin: '0 0 4px', letterSpacing: -0.5 }}>
+                {getGreeting()}, {user?.username || user?.email?.split('@')[0]}
+              </h2>
+              <p style={{ fontSize: 14, color: '#888', margin: 0 }}>Here's your financial overview</p>
+            </div>
+
+            {/* Balance Card */}
+            <div style={{
+              background: '#0f172a',
+              borderRadius: 20,
+              padding: '28px 24px',
+              marginBottom: 20,
+              position: 'relative',
+              overflow: 'hidden',
+            }}>
+              <div style={{
+                position: 'absolute', top: -40, right: -40,
+                width: 180, height: 180,
+                background: 'rgba(255,255,255,0.04)',
+                borderRadius: '50%',
+              }} />
+              <p style={{ fontSize: 11, letterSpacing: 2, textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', margin: '0 0 10px' }}>
+                TOTAL BALANCE
+              </p>
+              <h1 style={{ fontSize: 40, fontWeight: 800, color: '#fff', margin: '0 0 16px', letterSpacing: -1 }}>
+                ${balance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </h1>
+              <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+                <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)' }}>● USD: ${balance.toFixed(2)}</span>
+              </div>
+            </div>
+
+            {/* Quick Actions */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 20 }}>
+              {[
+                { icon: '⇄', title: 'Transfer', desc: 'Send money abroad', key: 'transfer' },
+                { icon: '↙', title: 'Deposit', desc: 'Add funds', action: 'deposit' },
+                { icon: '↗', title: 'Withdraw', desc: 'Cash out', action: 'withdraw' },
+                { icon: '+', title: 'New Wallet', desc: 'Add currency', action: 'wallet' },
+              ].map((item) => (
+                <div
+                  key={item.title}
+                  onClick={() => item.key && setPage(item.key as any)}
+                  style={{
+                    background: '#fff',
+                    borderRadius: 16,
+                    padding: '20px 16px',
+                    cursor: 'pointer',
+                    border: '1px solid #f1f5f9',
+                    transition: 'all 0.15s',
+                  }}
+                >
+                  <div style={{
+                    width: 40, height: 40,
+                    background: '#f8fafc',
+                    borderRadius: 12,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 18, marginBottom: 12,
+                    color: '#111',
+                  }}>
+                    {item.icon}
+                  </div>
+                  <div style={{ fontSize: 14, fontWeight: 600, color: '#111', marginBottom: 2 }}>{item.title}</div>
+                  <div style={{ fontSize: 12, color: '#888' }}>{item.desc}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Deposit / Withdraw */}
+            <div style={{
+              background: '#fff',
+              borderRadius: 16,
+              padding: '20px',
+              border: '1px solid #f1f5f9',
+              marginBottom: 20,
+            }}>
+              <h3 style={{ fontSize: 15, fontWeight: 600, color: '#111', margin: '0 0 16px' }}>
+                Add / Withdraw Funds
+              </h3>
+              <input
+                type="number"
+                placeholder="Enter amount"
+                value={amount}
+                onChange={e => setAmount(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '12px 14px',
+                  background: '#f8fafc',
+                  border: '1.5px solid #f1f5f9',
+                  borderRadius: 10,
+                  fontSize: 15,
+                  color: '#111',
+                  outline: 'none',
+                  boxSizing: 'border-box',
+                  marginBottom: 12,
+                }}
+              />
+              <div style={{ display: 'flex', gap: 10 }}>
+                <button
+                  onClick={handleDeposit}
+                  disabled={loading}
+                  style={{
+                    flex: 1, padding: '12px',
+                    background: '#2563eb', color: '#fff',
+                    border: 'none', borderRadius: 10,
+                    fontSize: 14, fontWeight: 600, cursor: 'pointer',
+                  }}
+                >
+                  ↙ Deposit
+                </button>
+                <button
+                  onClick={handleWithdraw}
+                  disabled={loading}
+                  style={{
+                    flex: 1, padding: '12px',
+                    background: '#fff', color: '#111',
+                    border: '1.5px solid #e2e8f0', borderRadius: 10,
+                    fontSize: 14, fontWeight: 600, cursor: 'pointer',
+                  }}
+                >
+                  ↗ Withdraw
+                </button>
+              </div>
+            </div>
+
+            {/* Stats */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              <div style={{ background: '#0f172a', borderRadius: 16, padding: '20px' }}>
+                <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', margin: '0 0 8px', letterSpacing: 1, textTransform: 'uppercase' }}>MONTHLY INCOME</p>
+                <p style={{ fontSize: 24, fontWeight: 700, color: '#fff', margin: 0 }}>$0</p>
+              </div>
+              <div style={{ background: '#fff', border: '1px solid #f1f5f9', borderRadius: 16, padding: '20px' }}>
+                <p style={{ fontSize: 11, color: '#888', margin: '0 0 8px', letterSpacing: 1, textTransform: 'uppercase' }}>MONTHLY EXPENSES</p>
+                <p style={{ fontSize: 24, fontWeight: 700, color: '#111', margin: 0 }}>$0</p>
+              </div>
+            </div>
+          </>
+        )}
+
+        {page === 'transfer' && <Transfer onToast={showToast} onSuccess={() => getMe().then((res: any) => setUser(res.data))} />}
+        {page === 'history' && <History />}
+        {page === 'admin' && <Admin onToast={showToast} />}
       </div>
 
-      {toast && (
-        <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />
-      )}
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
     </div>
   );
 }
