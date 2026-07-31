@@ -42,17 +42,11 @@ export default function Login({ onSuccess, onGoRegister }: LoginProps) {
 
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
-          <div style={{
-            width: 52, height: 52,
-            background: '#111',
-            borderRadius: 16,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            margin: '0 auto 20px',
-          }}>
-            <span style={{ color: '#fff', fontSize: 22, fontWeight: 700 }}>S</span>
-          </div>
+          <div style={{ width: 52, height: 52, background: '#111', borderRadius: 16, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', padding: '0 13px', gap: 5 }}>
+  <div style={{ width: 26, height: 4, background: 'white', borderRadius: 2 }} />
+  <div style={{ width: 18, height: 4, background: 'white', borderRadius: 2, opacity: 0.6 }} />
+  <div style={{ width: 12, height: 4, background: 'white', borderRadius: 2, opacity: 0.3 }} />
+</div>
           <h1 style={{ fontSize: 24, fontWeight: 700, color: '#111', margin: '0 0 6px', letterSpacing: -0.5 }}>
             Welcome back
           </h1>

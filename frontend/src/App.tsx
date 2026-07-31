@@ -135,9 +135,11 @@ function App() {
         position: 'sticky', top: 0, zIndex: 100,
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{ width: 32, height: 32, background: '#111', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ color: '#fff', fontWeight: 700, fontSize: 14 }}>S</span>
-          </div>
+        <div style={{ width: 32, height: 32, background: '#111', borderRadius: 8, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', padding: '0 8px', gap: 3 }}>
+  <div style={{ width: 16, height: 3, background: 'white', borderRadius: 2 }} />
+  <div style={{ width: 11, height: 3, background: 'white', borderRadius: 2, opacity: 0.6 }} />
+  <div style={{ width: 7, height: 3, background: 'white', borderRadius: 2, opacity: 0.3 }} />
+</div>
           <span style={{ fontSize: 17, fontWeight: 700, color: '#111', letterSpacing: -0.3 }}>Stratum</span>
         </div>
         <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 8 }}>
@@ -154,9 +156,11 @@ function App() {
           <div style={{ position: 'absolute', top: 0, right: 0, bottom: 0, width: 260, background: '#fff', padding: '24px 20px', display: 'flex', flexDirection: 'column' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{ width: 32, height: 32, background: '#111', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <span style={{ color: '#fff', fontWeight: 700, fontSize: 14 }}>S</span>
-                </div>
+               <div style={{ width: 32, height: 32, background: '#111', borderRadius: 8, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', padding: '0 8px', gap: 3 }}>
+  <div style={{ width: 16, height: 3, background: 'white', borderRadius: 2 }} />
+  <div style={{ width: 11, height: 3, background: 'white', borderRadius: 2, opacity: 0.6 }} />
+  <div style={{ width: 7, height: 3, background: 'white', borderRadius: 2, opacity: 0.3 }} />
+</div>
                 <span style={{ fontWeight: 700, fontSize: 16, color: '#111' }}>Stratum</span>
               </div>
               <button onClick={() => setMenuOpen(false)} style={{ background: 'none', border: 'none', fontSize: 20, cursor: 'pointer', color: '#888' }}>✕</button>
