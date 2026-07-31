@@ -42,7 +42,7 @@ export default function Login({ onSuccess, onGoRegister }: LoginProps) {
 
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
-          <div style={{ width: 52, height: 52, background: '#111', borderRadius: 16, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', padding: '0 13px', gap: 5 }}>
+          <div style={{ width: 30, height: 52, background: '#111', borderRadius: 16, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', padding: '0 13px', gap: 5 }}>
   <div style={{ width: 26, height: 4, background: 'white', borderRadius: 2 }} />
   <div style={{ width: 18, height: 4, background: 'white', borderRadius: 2, opacity: 0.6 }} />
   <div style={{ width: 12, height: 4, background: 'white', borderRadius: 2, opacity: 0.3 }} />

@@ -135,7 +135,7 @@ function App() {
         position: 'sticky', top: 0, zIndex: 100,
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        <div style={{ width: 32, height: 32, background: '#111', borderRadius: 8, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', padding: '0 8px', gap: 3 }}>
+        <div style={{ width: 20, height: 32, background: '#111', borderRadius: 8, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', padding: '0 8px', gap: 3 }}>
   <div style={{ width: 16, height: 3, background: 'white', borderRadius: 2 }} />
   <div style={{ width: 11, height: 3, background: 'white', borderRadius: 2, opacity: 0.6 }} />
   <div style={{ width: 7, height: 3, background: 'white', borderRadius: 2, opacity: 0.3 }} />
