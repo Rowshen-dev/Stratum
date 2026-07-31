@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import Login from './pages/Login';
 import Transfer from './pages/Transfer';
@@ -378,19 +377,3 @@ function App() {
 }
 
 export default App;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
