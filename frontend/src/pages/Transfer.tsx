@@ -14,7 +14,7 @@ export default function Transfer({ onToast, onSuccess }: TransferProps) {
   const [recipientCountry, setRecipientCountry] = useState('');
   const [note, setNote] = useState('');
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
+  
 
   const exchangeRate = 0.92;
   const fee = Number(amount) > 0 ? Number(amount) * 0.001 : 0;
@@ -35,7 +35,7 @@ export default function Transfer({ onToast, onSuccess }: TransferProps) {
         toEmail,
         amount: Number(amount),
       });
-      setSuccess(true);
+      
       setStep(3);
       onSuccess();
     } catch (err: any) {
@@ -51,7 +51,7 @@ export default function Transfer({ onToast, onSuccess }: TransferProps) {
     setRecipientName('');
     setRecipientCountry('');
     setNote('');
-    setSuccess(false);
+    
   };
 
   return (
