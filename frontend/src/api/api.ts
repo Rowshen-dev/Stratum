@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const api = axios.create({
-  baseURL: 'https://stratum-lyh5.onrender.com',
+  baseURL: 'https://stratum-iyh5.onrender.com',
 
 });
 
