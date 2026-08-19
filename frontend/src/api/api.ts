@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const api = axios.create({
-  baseURL: 'https://cortex-production-4400.up.railway.app',
+  baseURL: 'https://stratum-lyh5.onrender.com',
 
 });
 
