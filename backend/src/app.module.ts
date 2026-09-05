@@ -10,6 +10,9 @@ import { WalletModule } from './wallet/wallet.module';
 import { TransactionsModule } from './transactions/transactions.module';
 import { Transaction } from './transactions/transaction.entity';
 import { UsersModule } from './auth/user/users.module';
+import { PayoutsModule } from './payouts/payouts.module';
+import { Payout } from './payouts/payout.entity';
+import { Beneficiary } from './payouts/beneficiary.entity';
 
 
 @Module({
@@ -21,7 +24,7 @@ import { UsersModule } from './auth/user/users.module';
   username: process.env.PGUSER,
   password: process.env.PGPASSWORD,
   database: process.env.PGDATABASE,
-  entities: [User, Role, Wallet, Transaction],
+  entities: [User, Role, Wallet, Transaction, Payout, Beneficiary],
   synchronize: true,
   ssl: process.env.NODE_ENV === 'production' ? {
   rejectUnauthorized: false,
@@ -33,6 +36,7 @@ import { UsersModule } from './auth/user/users.module';
     WalletModule,
     TransactionsModule,
     UsersModule,
+    PayoutsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

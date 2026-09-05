@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Login from './pages/Login';
 import Transfer from './pages/Transfer';
+import Payout from './pages/Payout';
 import History from './pages/History';
 import Admin from './pages/Admin';
 import Toast from './components/Toast';
@@ -34,7 +35,7 @@ function Modal({ title, onClose, children }: { title: string; onClose: () => voi
 }
 
 function App() {
-  const [page, setPage] = useState<'login' | 'register' | 'dashboard' | 'transfer' | 'history' | 'admin'>('login');
+  const [page, setPage] = useState<'login' | 'register' | 'payout' | 'dashboard' | 'transfer' | 'history' | 'admin'>('login');
   const [user, setUser] = useState<any>(null);
   const [modal, setModal] = useState<Modal>(null);
   const [amount, setAmount] = useState('');
@@ -51,13 +52,13 @@ function App() {
     const token = localStorage.getItem('token');
     if (token) {
       getMe()
-        .then((res: any) => { setUser(res.data); setPage('dashboard'); })
+        .then((res: any) => { setUser(res.data); setPage('payout'); })
         .catch(() => { localStorage.removeItem('token'); setPage('login'); });
     }
   }, []);
 
   const handleLoginSuccess = () => {
-    getMe().then((res: any) => { setUser(res.data); setPage('dashboard'); });
+    getMe().then((res: any) => { setUser(res.data); setPage('payout'); });
   };
 
   const handleLogout = () => {
@@ -109,6 +110,7 @@ function App() {
   };
 
   const navItems = [
+    { icon: '↗', label: 'Send payment', key: 'payout' },
     { icon: '⊞', label: 'Dashboard', key: 'dashboard' },
     { icon: '⇄', label: 'Transfer', key: 'transfer' },
     { icon: '◷', label: 'History', key: 'history' },
@@ -255,6 +257,7 @@ function App() {
           </>
         )}
 
+        {page === 'payout' && <Payout onToast={showToast} onSuccess={() => getMe().then((res: any) => setUser(res.data))} />}
         {page === 'transfer' && <Transfer onToast={showToast} onSuccess={() => getMe().then((res: any) => setUser(res.data))} />}
         {page === 'history' && <History />}
         {page === 'admin' && <Admin onToast={showToast} />}

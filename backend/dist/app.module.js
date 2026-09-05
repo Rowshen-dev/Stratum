@@ -19,6 +19,9 @@ const wallet_module_1 = require("./wallet/wallet.module");
 const transactions_module_1 = require("./transactions/transactions.module");
 const transaction_entity_1 = require("./transactions/transaction.entity");
 const users_module_1 = require("./auth/user/users.module");
+const payouts_module_1 = require("./payouts/payouts.module");
+const payout_entity_1 = require("./payouts/payout.entity");
+const beneficiary_entity_1 = require("./payouts/beneficiary.entity");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -32,7 +35,7 @@ exports.AppModule = AppModule = __decorate([
                 username: process.env.PGUSER,
                 password: process.env.PGPASSWORD,
                 database: process.env.PGDATABASE,
-                entities: [user_entity_1.User, role_entity_1.Role, wallet_entity_1.Wallet, transaction_entity_1.Transaction],
+                entities: [user_entity_1.User, role_entity_1.Role, wallet_entity_1.Wallet, transaction_entity_1.Transaction, payout_entity_1.Payout, beneficiary_entity_1.Beneficiary],
                 synchronize: true,
                 ssl: process.env.NODE_ENV === 'production' ? {
                     rejectUnauthorized: false,
@@ -42,6 +45,7 @@ exports.AppModule = AppModule = __decorate([
             wallet_module_1.WalletModule,
             transactions_module_1.TransactionsModule,
             users_module_1.UsersModule,
+            payouts_module_1.PayoutsModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
