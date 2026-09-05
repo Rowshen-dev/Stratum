@@ -37,17 +37,17 @@ export class Beneficiary {
   deliveryMethod: DeliveryMethod;
 
   // Для CARD — последние 4 цифры карты (полный номер не храним)
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', length: 4, nullable: true })
   cardLast4: string | null;
 
   // Для BANK — реквизиты
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   bankName: string | null;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   accountNumber: string | null;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   swiftCode: string | null;
 
   @CreateDateColumn()

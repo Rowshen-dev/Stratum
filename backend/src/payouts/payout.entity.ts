@@ -91,7 +91,7 @@ export class Payout {
   purpose: PayoutPurpose;
 
   // Номер инвойса или договора — то, что спросит банк при проверке
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   invoiceReference: string | null;
 
   @Column({ default: 'INITIATED' })

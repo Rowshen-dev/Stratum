@@ -56,19 +56,19 @@ __decorate([
     __metadata("design:type", String)
 ], Beneficiary.prototype, "deliveryMethod", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
+    (0, typeorm_1.Column)({ type: 'varchar', length: 4, nullable: true }),
     __metadata("design:type", Object)
 ], Beneficiary.prototype, "cardLast4", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
+    (0, typeorm_1.Column)({ type: 'varchar', nullable: true }),
     __metadata("design:type", Object)
 ], Beneficiary.prototype, "bankName", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
+    (0, typeorm_1.Column)({ type: 'varchar', nullable: true }),
     __metadata("design:type", Object)
 ], Beneficiary.prototype, "accountNumber", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
+    (0, typeorm_1.Column)({ type: 'varchar', nullable: true }),
     __metadata("design:type", Object)
 ], Beneficiary.prototype, "swiftCode", void 0);
 __decorate([
